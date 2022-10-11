@@ -242,9 +242,16 @@ ggplot(Sales_Stores) +
 
 ```{r #c.i}
 
-Sales_Stores_Revenues <- Laptop_Sales_Data[,.(Transactions=.N,Revenues=sum(Retail.Price, na.rm = TRUE)), by=Store.Postcode]
+Sales_Stores_Revenues <- Laptop_Sales_Data[,.(Volumes=.N,Revenues=sum(Retail.Price, na.rm = TRUE)), by=Store.Postcode][,Total_Revenues:=sum(Revenues)][,Total_Volumes:=sum(Volumes)][,Percentage_Volumes:=(Volumes/Total_Volumes)*100][,Percentage_Sales:=(Revenues/Total_Revenues)*100]
 
-
+ggplot(Sales_Stores_Revenues) +
+ aes(x = Transactions, y = Revenues, colour = Store.Postcode) +
+ geom_point(shape = "circle", 
+ size = 2.45) +
+ scale_color_hue(direction = 1) +
+ labs(x = "Sales Volumes", y = "Revenues", title = "ScatterPlot Of Sales Volumes VS Revenues per Store", 
+ subtitle = "In 2018")
+ theme_minimal()
 
 
 ```
