@@ -21,6 +21,7 @@ cat("\014") # clean console
 
 # Loading Packages 
 
+library(tidyverse)
 library(data.table)
 library(lubridate)
 library(tidyverse)
@@ -144,7 +145,7 @@ ggplot(Retail_Price_and_Dates_Day) +
 
 #### iii.
 
-```{r Dat Subset}
+```{r Data Subset2}
 
 #### Set Up a Data Subset and NA OMIT
 
@@ -173,7 +174,7 @@ Retail_Price_Outlets_Date_Month <- Retail_Price_Outlets_Date[,Floor.Date:=floor_
 
 colnames(Retail_Price_Outlets_Date_Month)[3] <- "Mean_Retail_Price"
 
-# Plotting
+# Plot of the Monthly Retail Price per Stores
 
 ggplot(Retail_Price_Outlets_Date_Month) +
  aes(x = Floor.Date, y = Mean_Retail_Price, colour = Store.Postcode) +
@@ -183,8 +184,7 @@ ggplot(Retail_Price_Outlets_Date_Month) +
  subtitle = "In 2018") +
  theme_minimal()
 
-
-
+# 
 
 
 ``` 
