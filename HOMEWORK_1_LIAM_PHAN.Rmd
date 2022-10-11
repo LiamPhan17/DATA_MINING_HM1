@@ -281,8 +281,6 @@ Detail_Price <- Laptop_Sales_Data[,.(Retail.Price,Screen.Size..Inches.,Battery.L
 
 Detail_Price <- na.omit(Detail_Price)
 
-Scatter_Plot_Detail <- pairs(Detail_Price[,1:6], pch = 19, lower.panel = NULL)
-
 ```
 
 
