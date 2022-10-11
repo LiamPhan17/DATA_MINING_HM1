@@ -21,11 +21,9 @@ cat("\014") # clean console
 
 # Loading Packages 
 
-library(tidyverse)
 library(data.table)
 library(lubridate)
 library(tidyverse)
-library(magrittr)
 library(esquisse)
 library(plyr)
 library(ggplot2)
@@ -245,13 +243,13 @@ ggplot(Sales_Stores) +
 Sales_Stores_Revenues <- Laptop_Sales_Data[,.(Volumes=.N,Revenues=sum(Retail.Price, na.rm = TRUE),Configuration), by=Store.Postcode][,Total_Revenues:=sum(Revenues)][,Total_Volumes:=sum(Volumes)][,Percentage_Volumes:=(Volumes/Total_Volumes)*100][,Percentage_Sales:=(Revenues/Total_Revenues)*100]
 
 ggplot(Sales_Stores_Revenues) +
- aes(x = Volumes, y = Revenues, colour = Store.Postcode) +
- geom_point(shape = "circle", 
- size = 2.45) +
- scale_color_hue(direction = 1) +
- labs(x = "Sales Volumes", y = "Revenues", title = "ScatterPlot Of Sales Volumes VS Revenues per Store", 
- subtitle = "In 2018")
+ aes(x = Volumes, y = Revenues) +
+ geom_point(shape = "circle", size = 2.25, 
+ colour = "#112446") +
+ labs(x = "Volumes", y = "Revenues", title = "Scatterplot Of Volumes VS Revenues", 
+ subtitle = "In 2018") +
  theme_minimal()
+
 
 ```
 
@@ -264,10 +262,10 @@ Sales_Stores_Revenues_Configuration <- Sales_Stores_Revenues
 
 ggplot(Sales_Stores_Revenues_Configuration) +
  aes(x = Volumes, y = Revenues, colour = Configuration) +
- geom_point(shape = "circle", size = 2.95) +
+ geom_point(shape = "circle", size = 2L) +
  scale_color_gradient() +
- labs(x = "Sales Volume", y = "Sales Revenues", 
- title = "Scatterplot Of Sales Volumes VS Sales Revenues (Regarding Configurations)", subtitle = "In 2018") +
+ labs(x = "Volumes", y = "Revenues", 
+ title = "Scatterplot of Volumes VS Revenues (with Configuration Relationship)", subtitle = "In 2018") +
  theme_minimal()
 
 
@@ -279,6 +277,11 @@ ggplot(Sales_Stores_Revenues_Configuration) +
 
 ```{r #d.i}
 
+Detail_Price <- Laptop_Sales_Data[,.(Retail.Price,Screen.Size..Inches.,Battery.Life..Hours.,RAM..GB.,Processor.Speeds..GHz.,HD.Size..GB.)]
+
+Detail_Price <- na.omit(Detail_Price)
+
+Scatter_Plot_Detail <- pairs(Detail_Price[,1:6], pch = 19, lower.panel = NULL)
 
 ```
 
@@ -286,6 +289,28 @@ ggplot(Sales_Stores_Revenues_Configuration) +
 #### ii.
 
 ```{r #d.ii}
+
+Stores_Details <- Laptop_Sales_Data[,.(Store.Postcode,Integrated.Wireless.,Bundled.Applications.)]
+
+Stores_Details <- na.omit(Stores_Details)
+
+ggplot(Stores_Details) +
+ aes(x = Store.Postcode, fill = Bundled.Applications.) +
+ geom_bar() +
+ scale_fill_brewer(palette = "Greens", 
+ direction = 1) +
+ labs(x = "Stores", y = "Count", title = "Stores Bundled Applications Count", 
+ subtitle = "In 2018", fill = "Bundled Application") +
+ theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+
+ggplot(Stores_Details) +
+ aes(x = Store.Postcode, fill = Integrated.Wireless.) +
+ geom_bar() +
+ scale_fill_brewer(palette = "Greens", 
+ direction = 1) +
+ labs(x = "Stores", y = "Count", title = "Stores Integrated Wireless Count", 
+ subtitle = "In 2018", fill = "Integrated Wireless") +
+ theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
 
 
 ```
