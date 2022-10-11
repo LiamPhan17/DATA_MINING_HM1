@@ -1,0 +1,144 @@
+---
+title: "HOMEWORK 1 - Creating Value Through Data Mining (S402010)"
+author: "Liam Phan"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# HOMEWORK 1 
+
+## Settings Up
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+rm(list = ls()) # clean environment
+cat("\014") # clean console
+```
+
+# Loading Packages
+
+```{r Loading Packages and Datas}
+
+# Loading Packages 
+
+library(data.table)
+library(lubridate)
+library(tidyverse)
+library(esquisse)
+library(plyr)
+library(ggplot2)
+library(cowplot)
+library(naniar) #for NA exploration
+library(sp) #spatial data
+library(ggmap) #for map
+library(osmdata) #openstreetmap
+library(reshape2)
+
+```
+
+## Loading Datas and Cleaning
+
+```{r init}
+
+Laptop_Sales_Data <- fread("DATA/LaptopSales_red.csv")
+
+summary(Laptop_Sales_Data)
+
+str(Laptop_Sales_Data)
+
+gg_miss_var(Laptop_Sales_Data, show_pct = TRUE)
+
+```
+
+## EX 3.4 
+
+### a.Price Question
+
+```{r Dat Suset}
+
+#### Set Up a Data Subset and NA OMIT
+
+Retail_Price_and_Dates <- Laptop_Sales_Data[,.(Retail.Price,Date)][,Date:=mdy_hm(Date)]
+
+Retail_Price_and_Dates <- na.omit(Retail_Price_and_Dates)
+
+```
+
+#### i.
+
+```{r i}
+
+#### Histogram of the Retail Price of Computer In 2018
+
+ggplot(Retail_Price_and_Dates) +
+ aes(x = Retail.Price) +
+ geom_histogram(bins = 30L, fill = "#1c6155") +
+ labs(x = "Price", y = "Frequency", title = "Histogram of the Retail Price of Computer", subtitle = "In 2018") +
+ theme_minimal()
+
+#### Boxplot of the Retail Price of Computer In 2018
+
+ggplot(Retail_Price_and_Dates) +
+ aes(x = "", y = Retail.Price) +
+ geom_boxplot(fill = "#1c6155") +
+ labs(y = "Price", 
+ title = "Boxplot of the Retail Price of Computer", subtitle = "In 2018") +
+ theme_minimal()
+
+# Actual price
+Max_Date_Retail <- max(Retail_Price_and_Dates$Date)
+
+Actual_Price <- Retail_Price_and_Dates[Date %in% Max_Date_Retail, ]
+
+print(paste("Last Recorded Prices are ",Actual_Price[1,1], "USD", "and", Actual_Price[2,1],"USD"))
+
+rm(list = ls()) # clean environment
+cat("\014") # clean console
+
+```
+
+#### ii.
+
+```{r ii}
+
+Retail_Price_and_Dates_Month <- Retail_Price_and_Dates[, mean(Retail.Price), by = floor_date(Date,unit = "month")]
+
+colnames(Retail_Price_and_Dates_Month)[2] <- "Mean_Retail_Price"
+
+Retail_Price_and_Dates_Week <- Retail_Price_and_Dates[, Mean_Retail_Price:=mean(Retail.Price), by = floor_date(Date,unit = "week")]
+
+colnames(Retail_Price_and_Dates_Week)[2] <- "Mean_Retail_Price"
+
+Retail_Price_and_Dates_Day <- Retail_Price_and_Dates[, Mean_Retail_Price:=mean(Retail.Price), by = floor_date(Date,unit = "day")]
+
+colnames(Retail_Price_and_Dates_Day)[2] <- "Mean_Retail_Price"
+
+# Retail Price By Month
+ggplot(Retail_Price_and_Dates_Month) +
+ aes(x = floor_date, y = Mean_Retail_Price) +
+ geom_step(size = 1.25, 
+ colour = "#112446") +
+ labs(x = "Month", y = "Price", title = "Retail Price of Computer in 2018", 
+ subtitle = "Aggregated by Month") +
+ theme_minimal()
+
+# Retail Price By Week
+ggplot(Retail_Price_and_Dates_Week) +
+ aes(x = floor_date, y = Mean_Retail_Price) +
+ geom_step(size = 1.25, 
+ colour = "#112446") +
+ labs(x = "Week", y = "Price", title = "Retail Price of Computer in 2018", 
+ subtitle = "Aggregated by Week") +
+ theme_minimal()
+
+# Retail Price By Day
+ggplot(Retail_Price_and_Dates_Day) +
+ aes(x = floor_date, y = Mean_Retail_Price) +
+ geom_step(size = 1.25, 
+ colour = "#112446") +
+ labs(x = "Day", y = "Price", title = "Retail Price of Computer in 2018", 
+ subtitle = "Aggregated by Day") +
+ theme_minimal()
+
+
+```
