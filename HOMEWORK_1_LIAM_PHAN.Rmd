@@ -24,6 +24,7 @@ cat("\014") # clean console
 library(data.table)
 library(lubridate)
 library(tidyverse)
+library(magrittr)
 library(esquisse)
 library(plyr)
 library(ggplot2)
@@ -138,3 +139,40 @@ ggplot(Retail_Price_and_Dates_Day) +
  theme_minimal()
 
 ```
+
+#### iii.
+
+```{r Dat Subset}
+
+#### Set Up a Data Subset and NA OMIT
+
+Retail_Price_Outlets_Date <-Laptop_Sales_Data[,.(Retail.Price,Store.Postcode,Date)][,Date:=mdy_hm(Date)]
+
+Retail_Price_Outlets_Date  <- na.omit(Retail_Price_Outlets_Date)
+
+```
+
+
+```{r iii}
+
+# Price Decomposed by Retail Outlets
+
+# Boxplot Across Retail Outlets
+
+ggplot(Retail_Price_Outlets_Date) +
+ aes(x = Store.Postcode, y = Retail.Price) +
+ geom_boxplot(fill = "#112446") +
+ labs(x = "Stores Postcode", y = "Price", title = "Boxplot Of The Retail Price Across Stores", subtitle = "In 2018") +
+ theme_minimal()
+
+# Retail Price Across Stores During 2018
+
+Retail_Price_Dates_Outlet_Date_Month <- Retail_Price_Outlets_Date[, Floor_Date:=floor_date(Date,unit = "month")]
+
+
+
+
+
+
+
+``` 
