@@ -242,6 +242,10 @@ ggplot(Sales_Stores) +
 
 ```{r #c.i}
 
+Sales_Stores_Revenues <- Laptop_Sales_Data[,.(Transactions=.N,Revenues=sum(Retail.Price, na.rm = TRUE)), by=Store.Postcode]
+
+
+
 
 ```
 
