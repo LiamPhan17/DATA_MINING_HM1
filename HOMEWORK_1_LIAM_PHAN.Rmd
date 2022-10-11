@@ -117,7 +117,7 @@ colnames(Retail_Price_and_Dates_Day)[2] <- "Mean_Retail_Price"
 # Retail Price By Month
 ggplot(Retail_Price_and_Dates_Month) +
  aes(x = floor_date, y = Mean_Retail_Price) +
- geom_step(size = 1.25, 
+ geom_step(size = 1.1, 
  colour = "#112446") +
  labs(x = "Month", y = "Price", title = "Retail Price of Computer in 2018", 
  subtitle = "Aggregated by Month") +
@@ -126,7 +126,7 @@ ggplot(Retail_Price_and_Dates_Month) +
 # Retail Price By Week
 ggplot(Retail_Price_and_Dates_Week) +
  aes(x = floor_date, y = Mean_Retail_Price) +
- geom_step(size = 1.25, 
+ geom_step(size = 0.4, 
  colour = "#112446") +
  labs(x = "Week", y = "Price", title = "Retail Price of Computer in 2018", 
  subtitle = "Aggregated by Week") +
@@ -135,7 +135,7 @@ ggplot(Retail_Price_and_Dates_Week) +
 # Retail Price By Day
 ggplot(Retail_Price_and_Dates_Day) +
  aes(x = floor_date, y = Mean_Retail_Price) +
- geom_step(size = 1.25, 
+ geom_step(size = 0.2, 
  colour = "#112446") +
  labs(x = "Day", y = "Price", title = "Retail Price of Computer in 2018", 
  subtitle = "Aggregated by Day") +
@@ -153,28 +153,32 @@ Retail_Price_Outlets_Date <- Laptop_Sales_Data[,.(Retail.Price,Store.Postcode,Da
 
 Retail_Price_Outlets_Date  <- na.omit(Retail_Price_Outlets_Date)
 
+Retail_Price_Configuration <- Laptop_Sales_Data[,.(Retail.Price,Configuration,Screen.Size..Inches.,Battery.Life..Hours.,RAM..GB.,Processor.Speeds..GHz.,Integrated.Wireless.,HD.Size..GB.,Bundled.Applications.)]
+
+Retail_Price_Configuration <- na.omit(Retail_Price_Configuration)
+
 ```
 
 
 ```{r iii}
 
-# Price Decomposed by Retail Outlets
+#### Price Decomposed by Retail Outlets
 
-# Boxplot Across Retail Outlets
+#### Boxplot Across Retail Outlets
 
 ggplot(Retail_Price_Outlets_Date) +
  aes(x = Store.Postcode, y = Retail.Price) +
  geom_boxplot(fill = "#112446") +
  labs(x = "Stores Postcode", y = "Price", title = "Boxplot Of The Retail Price Across Stores", subtitle = "In 2018") +
- theme_minimal()
+ theme_minimal() + scale_x_discrete(guide = guide_axis(n.dodge = 1)) + theme(axis.text.x=element_text(size=rel(1), angle=90))
 
-# Retail Price Across Stores During 2018
+#### Retail Price Across Stores During 2018
 
 Retail_Price_Outlets_Date_Month <- Retail_Price_Outlets_Date[,Floor.Date:=floor_date(Date,unit="month")][,c(Mean_Price=mean(Retail.Price)), by=list(Store.Postcode,Floor.Date)]
 
 colnames(Retail_Price_Outlets_Date_Month)[3] <- "Mean_Retail_Price"
 
-# Plot of the Monthly Retail Price per Stores
+#### Plot of the Monthly Retail Price per Stores
 
 ggplot(Retail_Price_Outlets_Date_Month) +
  aes(x = Floor.Date, y = Mean_Retail_Price, colour = Store.Postcode) +
@@ -184,7 +188,85 @@ ggplot(Retail_Price_Outlets_Date_Month) +
  subtitle = "In 2018") +
  theme_minimal()
 
-# 
+#### Plot Of The Retail Price per Configuration
 
+ggplot(Retail_Price_Configuration) +
+ aes(x = Configuration, y = Retail.Price, colour = Battery.Life..Hours.) +
+ geom_point(shape = "circle", size = 0.8) +
+ scale_color_gradient() +
+ labs(y = "Retail Price", title = "Retail Price and Configuration ", 
+ subtitle = "In 2018") +
+ theme_minimal()
 
 ``` 
+
+### b.Location Questions
+
+#### i.
+
+```{r #b.i}
+
+```
+
+#### ii.
+
+```{r #b.ii}
+
+Laptop_Sales_Data_2 <- Laptop_Sales_Data
+
+Sales_Stores <- Laptop_Sales_Data_2[, .N, by=Store.Postcode]
+
+#### Plot Most Sales from Stores
+
+ggplot(Sales_Stores) +
+ aes(x = reorder(Store.Postcode,-N), y = N) +
+ geom_col(fill = "#112446") +
+ labs(x = "Stores", 
+ y = "Number Of Sales", title = "Number of Sales per Store", subtitle = "In 2018") +
+ theme_minimal()  + geom_text(aes(label = N), vjust = 2, colour = "white") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+
+
+```
+
+#### iii.
+
+```{r #b.iii}
+
+
+```
+
+### c.Revenue Questions
+
+#### i.
+
+```{r #c.i}
+
+
+```
+
+
+#### ii.
+
+```{r #c.ii}
+
+
+```
+
+### d.Configuration Questions 
+
+#### i.
+
+```{r #d.i}
+
+
+```
+
+
+#### ii.
+
+```{r #d.ii}
+
+
+```
+
