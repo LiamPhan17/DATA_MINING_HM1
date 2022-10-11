@@ -242,10 +242,10 @@ ggplot(Sales_Stores) +
 
 ```{r #c.i}
 
-Sales_Stores_Revenues <- Laptop_Sales_Data[,.(Volumes=.N,Revenues=sum(Retail.Price, na.rm = TRUE)), by=Store.Postcode][,Total_Revenues:=sum(Revenues)][,Total_Volumes:=sum(Volumes)][,Percentage_Volumes:=(Volumes/Total_Volumes)*100][,Percentage_Sales:=(Revenues/Total_Revenues)*100]
+Sales_Stores_Revenues <- Laptop_Sales_Data[,.(Volumes=.N,Revenues=sum(Retail.Price, na.rm = TRUE),Configuration), by=Store.Postcode][,Total_Revenues:=sum(Revenues)][,Total_Volumes:=sum(Volumes)][,Percentage_Volumes:=(Volumes/Total_Volumes)*100][,Percentage_Sales:=(Revenues/Total_Revenues)*100]
 
 ggplot(Sales_Stores_Revenues) +
- aes(x = Transactions, y = Revenues, colour = Store.Postcode) +
+ aes(x = Volumes, y = Revenues, colour = Store.Postcode) +
  geom_point(shape = "circle", 
  size = 2.45) +
  scale_color_hue(direction = 1) +
@@ -253,13 +253,22 @@ ggplot(Sales_Stores_Revenues) +
  subtitle = "In 2018")
  theme_minimal()
 
-
 ```
 
 
 #### ii.
 
 ```{r #c.ii}
+
+Sales_Stores_Revenues_Configuration <- Sales_Stores_Revenues
+
+ggplot(Sales_Stores_Revenues_Configuration) +
+ aes(x = Volumes, y = Revenues, colour = Configuration) +
+ geom_point(shape = "circle", size = 2.95) +
+ scale_color_gradient() +
+ labs(x = "Sales Volume", y = "Sales Revenues", 
+ title = "Scatterplot Of Sales Volumes VS Sales Revenues (Regarding Configurations)", subtitle = "In 2018") +
+ theme_minimal()
 
 
 ```
