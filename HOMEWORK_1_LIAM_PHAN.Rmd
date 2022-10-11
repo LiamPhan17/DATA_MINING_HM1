@@ -43,6 +43,8 @@ library(reshape2)
 
 Laptop_Sales_Data <- fread("DATA/LaptopSales_red.csv")
 
+is.data.table(Laptop_Sales_Data)
+
 summary(Laptop_Sales_Data)
 
 str(Laptop_Sales_Data)
@@ -146,7 +148,7 @@ ggplot(Retail_Price_and_Dates_Day) +
 
 #### Set Up a Data Subset and NA OMIT
 
-Retail_Price_Outlets_Date <-Laptop_Sales_Data[,.(Retail.Price,Store.Postcode,Date)][,Date:=mdy_hm(Date)]
+Retail_Price_Outlets_Date <- Laptop_Sales_Data[,.(Retail.Price,Store.Postcode,Date)][,Date:=mdy_hm(Date)]
 
 Retail_Price_Outlets_Date  <- na.omit(Retail_Price_Outlets_Date)
 
@@ -167,9 +169,19 @@ ggplot(Retail_Price_Outlets_Date) +
 
 # Retail Price Across Stores During 2018
 
-Retail_Price_Dates_Outlet_Date_Month <- Retail_Price_Outlets_Date[, Floor_Date:=floor_date(Date,unit = "month")]
+Retail_Price_Outlets_Date_Month <- Retail_Price_Outlets_Date[,Floor.Date:=floor_date(Date,unit="month")][,c(Mean_Price=mean(Retail.Price)), by=list(Store.Postcode,Floor.Date)]
 
+colnames(Retail_Price_Outlets_Date_Month)[3] <- "Mean_Retail_Price"
 
+# Plotting
+
+ggplot(Retail_Price_Outlets_Date_Month) +
+ aes(x = Floor.Date, y = Mean_Retail_Price, colour = Store.Postcode) +
+ geom_line(size = 0.5) +
+ scale_color_hue(direction = 1) +
+ labs(x = "Month", y = "Price", title = "Retail Price Across Months and Grouped by Stores", 
+ subtitle = "In 2018") +
+ theme_minimal()
 
 
 
