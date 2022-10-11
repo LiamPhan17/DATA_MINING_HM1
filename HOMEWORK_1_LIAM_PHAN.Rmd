@@ -9,7 +9,7 @@ output: html_document
 
 ## Settings Up
 
-```{r setup, include=FALSE}
+```{r 1, include=FALSE}
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 rm(list = ls()) # clean environment
 cat("\014") # clean console
@@ -17,7 +17,7 @@ cat("\014") # clean console
 
 # Loading Packages
 
-```{r Loading Packages and Datas}
+```{r 2}
 
 # Loading Packages 
 
@@ -38,7 +38,7 @@ library(reshape2)
 
 ## Loading Datas and Cleaning
 
-```{r init}
+```{r 3}
 
 Laptop_Sales_Data <- fread("DATA/LaptopSales_red.csv")
 
@@ -56,7 +56,7 @@ gg_miss_var(Laptop_Sales_Data, show_pct = TRUE)
 
 ### a.Price Question
 
-```{r Dat Subset}
+```{r 4}
 
 #### Set Up a Data Subset and NA OMIT
 
@@ -68,7 +68,7 @@ Retail_Price_and_Dates <- na.omit(Retail_Price_and_Dates)
 
 #### i.
 
-```{r i}
+```{r 5, fig.asp = 0.8, fig.width = 7}
 
 #### Histogram of the Retail Price of Computer In 2018
 
@@ -92,13 +92,13 @@ Max_Date_Retail <- max(Retail_Price_and_Dates$Date)
 
 Actual_Price <- Retail_Price_and_Dates[Date %in% Max_Date_Retail, ]
 
-print(paste("Last Recorded Prices are ",Actual_Price[1,1], "USD", "and", Actual_Price[2,1],"USD"))
+print(paste("Last Recorded Prices are", Actual_Price[1,1], "USD", "and", Actual_Price[2,1],"USD"))
 
 ```
 
 #### ii.
 
-```{r ii}
+```{r 6, fig.asp = 0.8, fig.width = 7}
 
 Retail_Price_and_Dates_Month <- Retail_Price_and_Dates[, mean(Retail.Price), by = floor_date(Date,unit = "month")]
 
@@ -143,7 +143,7 @@ ggplot(Retail_Price_and_Dates_Day) +
 
 #### iii.
 
-```{r Data Subset2}
+```{r 7}
 
 #### Set Up a Data Subset and NA OMIT
 
@@ -158,7 +158,7 @@ Retail_Price_Configuration <- na.omit(Retail_Price_Configuration)
 ```
 
 
-```{r iii}
+```{r 8, fig.asp = 0.8, fig.width = 7}
 
 #### Price Decomposed by Retail Outlets
 
@@ -202,13 +202,13 @@ ggplot(Retail_Price_Configuration) +
 
 #### i.
 
-```{r #b.i}
+```{r 9}
 
 ```
 
 #### ii.
 
-```{r #b.ii}
+```{r 10, fig.asp = 0.8, fig.width = 7}
 
 Laptop_Sales_Data_2 <- Laptop_Sales_Data
 
@@ -229,7 +229,7 @@ ggplot(Sales_Stores) +
 
 #### iii.
 
-```{r #b.iii}
+```{r 11}
 
 
 ```
@@ -238,7 +238,7 @@ ggplot(Sales_Stores) +
 
 #### i.
 
-```{r #c.i}
+```{r 12, fig.asp = 0.8, fig.width = 7}
 
 Sales_Stores_Revenues <- Laptop_Sales_Data[,.(Volumes=.N,Revenues=sum(Retail.Price, na.rm = TRUE),Configuration), by=Store.Postcode][,Total_Revenues:=sum(Revenues)][,Total_Volumes:=sum(Volumes)][,Percentage_Volumes:=(Volumes/Total_Volumes)*100][,Percentage_Sales:=(Revenues/Total_Revenues)*100]
 
@@ -256,7 +256,7 @@ ggplot(Sales_Stores_Revenues) +
 
 #### ii.
 
-```{r #c.ii}
+```{r 13,fig.asp = 0.8, fig.width = 7}
 
 Sales_Stores_Revenues_Configuration <- Sales_Stores_Revenues
 
@@ -275,7 +275,7 @@ ggplot(Sales_Stores_Revenues_Configuration) +
 
 #### i.
 
-```{r #d.i}
+```{r 14, fig.asp = 0.8, fig.width = 7}
 
 Detail_Price <- Laptop_Sales_Data[,.(Retail.Price,Screen.Size..Inches.,Battery.Life..Hours.,RAM..GB.,Processor.Speeds..GHz.,HD.Size..GB.)]
 
@@ -288,7 +288,7 @@ Scatter_Plot_Detail <- pairs(Detail_Price[,1:6], pch = 19, lower.panel = NULL)
 
 #### ii.
 
-```{r #d.ii}
+```{r 15,fig.asp = 0.8, fig.width = 7}
 
 Stores_Details <- Laptop_Sales_Data[,.(Store.Postcode,Integrated.Wireless.,Bundled.Applications.)]
 
