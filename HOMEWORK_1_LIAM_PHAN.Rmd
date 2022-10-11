@@ -54,7 +54,7 @@ gg_miss_var(Laptop_Sales_Data, show_pct = TRUE)
 
 ### a.Price Question
 
-```{r Dat Suset}
+```{r Dat Subset}
 
 #### Set Up a Data Subset and NA OMIT
 
@@ -92,9 +92,6 @@ Actual_Price <- Retail_Price_and_Dates[Date %in% Max_Date_Retail, ]
 
 print(paste("Last Recorded Prices are ",Actual_Price[1,1], "USD", "and", Actual_Price[2,1],"USD"))
 
-rm(list = ls()) # clean environment
-cat("\014") # clean console
-
 ```
 
 #### ii.
@@ -105,11 +102,11 @@ Retail_Price_and_Dates_Month <- Retail_Price_and_Dates[, mean(Retail.Price), by 
 
 colnames(Retail_Price_and_Dates_Month)[2] <- "Mean_Retail_Price"
 
-Retail_Price_and_Dates_Week <- Retail_Price_and_Dates[, Mean_Retail_Price:=mean(Retail.Price), by = floor_date(Date,unit = "week")]
+Retail_Price_and_Dates_Week <- Retail_Price_and_Dates[, mean(Retail.Price), by = floor_date(Date,unit = "week")]
 
 colnames(Retail_Price_and_Dates_Week)[2] <- "Mean_Retail_Price"
 
-Retail_Price_and_Dates_Day <- Retail_Price_and_Dates[, Mean_Retail_Price:=mean(Retail.Price), by = floor_date(Date,unit = "day")]
+Retail_Price_and_Dates_Day <- Retail_Price_and_Dates[, mean(Retail.Price), by = floor_date(Date,unit = "day")]
 
 colnames(Retail_Price_and_Dates_Day)[2] <- "Mean_Retail_Price"
 
@@ -139,6 +136,5 @@ ggplot(Retail_Price_and_Dates_Day) +
  labs(x = "Day", y = "Price", title = "Retail Price of Computer in 2018", 
  subtitle = "Aggregated by Day") +
  theme_minimal()
-
 
 ```
