@@ -240,16 +240,16 @@ ggplot(Sales_Stores) +
 
 ```{r 12, fig.asp = 0.8, fig.width = 7}
 
-Sales_Stores_Revenues <- Laptop_Sales_Data[,.(Volumes=.N,Revenues=sum(Retail.Price, na.rm = TRUE),Configuration), by=Store.Postcode][,Total_Revenues:=sum(Revenues)][,Total_Volumes:=sum(Volumes)][,Percentage_Volumes:=(Volumes/Total_Volumes)*100][,Percentage_Sales:=(Revenues/Total_Revenues)*100]
+Sales_Stores_Revenues <- Laptop_Sales_Data[,.(Volumes=.N, Revenues=sum(Retail.Price, na.rm = TRUE), Configuration), by= Store.Postcode]
 
 ggplot(Sales_Stores_Revenues) +
- aes(x = Volumes, y = Revenues) +
- geom_point(shape = "circle", size = 2.25, 
- colour = "#112446") +
- labs(x = "Volumes", y = "Revenues", title = "Scatterplot Of Volumes VS Revenues", 
- subtitle = "In 2018") +
+ aes(x = Volumes, y = Revenues, colour = Store.Postcode) +
+ geom_point(shape = "circle", 
+ size = 2L) +
+ scale_color_hue(direction = 1) +
+ labs(x = "Volumes", y = "Revenues", title = "Scatterplot Of Sales Volumes VS Sales Revenues ", 
+ subtitle = "In 2018", color = "Stores") +
  theme_minimal()
-
 
 ```
 
@@ -258,15 +258,9 @@ ggplot(Sales_Stores_Revenues) +
 
 ```{r 13,fig.asp = 0.8, fig.width = 7}
 
-Sales_Stores_Revenues_Configuration <- Sales_Stores_Revenues
+Sales_Stores_Revenues_Configuration_Ratio <- Sales_Stores_Revenues[, ratio_volume_revenue:=Revenues/Volumes]
 
-ggplot(Sales_Stores_Revenues_Configuration) +
- aes(x = Volumes, y = Revenues, colour = Configuration) +
- geom_point(shape = "circle", size = 2L) +
- scale_color_gradient() +
- labs(x = "Volumes", y = "Revenues", 
- title = "Scatterplot of Volumes VS Revenues (with Configuration Relationship)", subtitle = "In 2018") +
- theme_minimal()
+
 
 
 ```
@@ -288,7 +282,7 @@ Detail_Price <- na.omit(Detail_Price)
 
 ```{r 15,fig.asp = 0.8, fig.width = 7}
 
-Stores_Details <- Laptop_Sales_Data[,.(Store.Postcode,Integrated.Wireless.,Bundled.Applications.)]
+Stores_Details <- Laptop_Sales_Data[,.(Store.Postcode,Integrated.Wireless.,Bundled.Applications.,Configuration)]
 
 Stores_Details <- na.omit(Stores_Details)
 
@@ -309,6 +303,7 @@ ggplot(Stores_Details) +
  labs(x = "Stores", y = "Count", title = "Stores Integrated Wireless Count", 
  subtitle = "In 2018", fill = "Integrated Wireless") +
  theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+
 
 
 ```
