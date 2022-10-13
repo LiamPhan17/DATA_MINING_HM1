@@ -108,11 +108,9 @@ print(paste("Last Recorded Prices are", Actual_Price[1,1], "USD", "and", Actual_
 
 ```
 
-#### ii.
+#### ii.Does price change with time?
 
 ```{r 6, fig.asp = 0.8, fig.width = 7}
-
-days = list("Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche")
 
 # Aggregating by Month
 Retail_Price_and_Dates_Month <- Retail_Price_and_Dates[, mean(Retail.Price), by = floor_date(Date,unit="month")]
@@ -137,8 +135,9 @@ colnames(Retail_Price_and_Dates_Day)[2] <- "Mean_Retail_Price"
 Retail_Price_and_Dates_WeekDay <- Retail_Price_and_Dates[,Weekday:=weekdays(Date)]
 Retail_Price_and_Dates_WeekDay <- Retail_Price_and_Dates_WeekDay[,mean(Retail.Price),by=Weekday]
 
-colnames(Retail_Price_and_Dates_WeekDay)[2] <- "Mean_Retail_Price"
+Retail_Price_and_Dates_WeekDay$Weekday <- factor(Retail_Price_and_Dates_WeekDay$Weekday, ordered = TRUE, levels=(c("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche")))
 
+colnames(Retail_Price_and_Dates_WeekDay)[2] <- "Mean_Retail_Price"
 
 # Retail Price By Month
 RetailPricePlot1 <- ggplotly(
@@ -171,7 +170,7 @@ RetailPricePlot3 <- ggplotly(
   ggplot(Retail_Price_and_Dates_Day) +
  aes(x = Date, y = Mean_Retail_Price) +
  geom_line(size = 0.2, 
- colour = "#1c6155") + geom_point() +
+ colour = "#1c6155")  +
  labs(x = "Days", y = "Average Retail Price", title = "Average Retail Price of Computer in 2018", 
  subtitle = "Aggregated by Day") + 
  theme_classic()
@@ -186,16 +185,14 @@ RetailPricePlot4 <- ggplotly(
  aes(x = Weekday, y = Mean_Retail_Price) +
  geom_col(fill = "#1c6155") +
  labs(x = "Weekdays", y = "Average Retail Price", title = "Average Retail Price during Weekdays", subtitle = "In 2018") + 
- theme_classic() + coord_cartesian(ylim = c(500, 510))
+ theme_classic() + coord_cartesian(ylim = c(505, 510))
 )
 
 RetailPricePlot4
 
-
-
 ```
 
-#### iii.
+#### iii. Are prices consistent across retail outlets?
 
 ```{r 7}
 
@@ -213,8 +210,6 @@ Retail_Price_Configuration <- na.omit(Retail_Price_Configuration)
 
 ```{r 8, fig.asp = 0.8, fig.width = 7}
 
-#### Price Decomposed by Retail Outlets
-
 #### Boxplot Across Retail Outlets
 
 ggplotly(
@@ -224,6 +219,10 @@ ggplot(Retail_Price_Outlets_Date) +
  labs(x = "Stores Postcode", y = "Price", title = "Boxplot Of The Retail Price Across Stores", subtitle = "In 2018") +
  theme_classic() + scale_x_discrete(guide = guide_axis(n.dodge = 1)) + theme(axis.text.x=element_text(size=rel(1), angle=90))
 )
+
+```
+
+```{r 8, fig.asp = 0.8, fig.width = 7}
 
 #### Retail Price Across Stores During 2018 - Data
 
@@ -241,6 +240,11 @@ ggplot(Retail_Price_Outlets_Date_Month) +
  subtitle = "In 2018") +
  theme_classic()
 
+```
+
+#### iv. How does price change with configuration?
+
+```{r 8, fig.asp = 0.8, fig.width = 7} 
 
 #### Plot Of The Retail Price per Configuration
 
@@ -256,7 +260,7 @@ ggplot(Retail_Price_Configuration) +
 
 ### b.Location Questions
 
-#### i.
+#### i. Where are the stores and customers locatd?
 
 ```{r 9}
 
@@ -265,7 +269,7 @@ ggplot(Retail_Price_Configuration) +
 
 ```
 
-#### ii.
+#### ii. Which stores are selling the most?
 
 ```{r 10, fig.asp = 0.8, fig.width = 7}
 
@@ -273,7 +277,9 @@ Laptop_Sales_Data_2 <- Laptop_Sales_Data
 
 Sales_Stores <- Laptop_Sales_Data_2[, .N, by=Store.Postcode]
 
-#### Plot Most Sales from Stores
+Sales_Stores_2 <- Laptop_Sales_Data_2[,.(Revenues=sum(Retail.Price, na.rm = TRUE)),by=Store.Postcode]
+
+#### Plot Transactions per Stores
 
 ggplot(Sales_Stores) +
  aes(x = reorder(Store.Postcode,-N), y = N) +
@@ -282,39 +288,63 @@ ggplot(Sales_Stores) +
  y = "Number Of Transactions", title = "Number of Transactions per Store", subtitle = "In 2018") +
  theme_classic()  + geom_text(aes(label = N), vjust = 1.5, hjust=1.1, colour = "white", angle=90,size=3) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
+# Plot Revenues per Stores
 
-
+ggplot(Sales_Stores_2) +
+ aes(x = reorder(Store.Postcode,-Revenues), y = Revenues) +
+ geom_col(fill = "#1c6155") +
+ labs(x = "Store Postcode", 
+ y = "Revenues", title = "Revenues per Stores", subtitle = "In 2018") + geom_text(aes(label = Revenues), vjust = 1.5, hjust=1.1, colour = "white", angle=90,size=3) + 
+ theme_classic()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 ```
 
-#### iii.
+#### iii. How far stores are selling the most?
 
 ```{r 11}
 
 
 ```
 
-### c.Revenue Questions
+#### iv. How far stores are selling the most? - Alternative
 
-#### i.
+```{r 11-1}
 
-```{r 12, fig.asp = 0.8, fig.width = 7}
-
-Sales_Stores_Revenues <- Laptop_Sales_Data[,.(Volumes=.N, Revenues=sum(Retail.Price, na.rm = TRUE), Configuration), by= Store.Postcode]
-
-ggplot(Sales_Stores_Revenues) +
- aes(x = Volumes, y = Revenues, colour = Store.Postcode) +
- geom_point(shape = "circle", 
- size = 2L) +
- scale_color_hue(direction = 1) +
- labs(x = "Volumes", y = "Revenues", title = "Scatterplot Of Sales Volumes VS Sales Revenues ", 
- subtitle = "In 2018", color = "Stores") +
- theme_classic()
 
 ```
 
+### c.Revenue Questions
 
-#### ii.
+#### i. How do the sales volume in each store relate to Acell's revenues?
+
+```{r 12, fig.asp = 0.8, fig.width = 7}
+
+Sales_Stores_Revenues <- Laptop_Sales_Data[,.(Revenues=sum(Retail.Price, na.rm = TRUE)), by= Store.Postcode]
+
+Total_Revenue <- sum(Sales_Stores_Revenues$Revenues)
+
+Sales_Stores_Revenues <- Sales_Stores_Revenues[,Percentage_Revenue:=Revenues/Total_Revenue]
+
+Sales_Stores_Revenues$Percentage_Revenue <- Sales_Stores_Revenues$Percentage_Revenue*100
+
+```
+
+```{r 12.1, fig.asp = 0.8, fig.width = 7}
+
+ggplot(Sales_Stores_Revenues) +
+ aes(x = Store.Postcode, y = Percentage_Revenue) +
+ geom_col(fill = "#1c6155") +
+ labs(x = "Store Postcode", y = "Revenues % of Total Revenues", title = "Revenues Contribution per Stores", 
+ subtitle = "In 2018") +
+ theme_classic() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
+
+
+
+
+
+```
+
+#### ii. How does this relationship depend on the configuration?
 
 ```{r 13,fig.asp = 0.8, fig.width = 7}
 
@@ -325,7 +355,7 @@ Sales_Stores_Revenues_Configuration_Ratio <- Sales_Stores_Revenues[, ratio_volum
 
 ### d.Configuration Questions 
 
-#### i.
+#### i. What are the details of each configuration? How does this relate to price?
 
 ```{r 14, fig.asp = 0.8, fig.width = 7}
 
@@ -335,36 +365,13 @@ Detail_Price <- na.omit(Detail_Price)
 
 ```
 
-
-#### ii.
+#### ii. Do all stores sell all configurations?
 
 ```{r 15,fig.asp = 0.8, fig.width = 7}
 
-Stores_Details <- Laptop_Sales_Data[,.(Store.Postcode,Integrated.Wireless.,Bundled.Applications.,Configuration)]
+Stores_Details <- Laptop_Sales_Data[,.(Store.Postcode,Configuration)]
 
 Stores_Details <- na.omit(Stores_Details)
-
-ggplotly(
-ggplot(Stores_Details) +
- aes(x = Store.Postcode, fill = Bundled.Applications.) +
- geom_bar() +
- scale_fill_brewer(palette = "Greens", 
- direction = 1) +
- labs(x = "Stores", y = "Count", title = "Stores Bundled Applications Count", 
- subtitle = "In 2018", fill = "Bundled Application") +
- theme_classic() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
-)
-
-ggplotly(
-ggplot(Stores_Details) +
- aes(x = Store.Postcode, fill = Integrated.Wireless.) +
- geom_bar() +
- scale_fill_brewer(palette = "Greens", 
- direction = 1) +
- labs(x = "Stores", y = "Count", title = "Stores Integrated Wireless Count", 
- subtitle = "In 2018", fill = "Integrated Wireless") +
- theme_classic() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
-)
 
 ```
 
