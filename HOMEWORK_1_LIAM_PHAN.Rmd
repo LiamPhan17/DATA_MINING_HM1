@@ -238,8 +238,8 @@ ggplot(Retail_Price_Outlets_Date_Month) +
  scale_color_hue(direction = 1) +
  labs(x = "Month", y = "Price", title = "Retail Price Across Months and Grouped by Stores", 
  subtitle = "In 2018") +
- theme_classic()
-
+ theme_classic() 
+ 
 ```
 
 #### iv. How does price change with configuration?
@@ -302,6 +302,7 @@ ggplot(Sales_Stores_2) +
 #### iii. How far stores are selling the most?
 
 ```{r 11}
+
 
 
 ```
