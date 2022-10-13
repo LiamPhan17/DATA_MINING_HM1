@@ -68,20 +68,19 @@ Retail_Price_and_Dates <- na.omit(Retail_Price_and_Dates)
 
 #### i. At What Price are the laptops actually selling ?
 
-```{r 5, fig.asp = 0.8, fig.width = 7}
+```{r 5, fig.asp = 0.8, fig.width = 7, echo=FALSE}
 
 #### Histogram of the Retail Price of Computer In 2018
 
 ggplot(Retail_Price_and_Dates) +
  aes(x = Retail.Price) +
  geom_histogram(bins = 30L, fill = "#1c6155") +
- labs(x = "Price", y = "Frequency", title = "Histogram of the Retail Price of Computer", subtitle = "In 2018") +
- theme_classic()
+ labs(x = "Price", y = "Frequency", title = "Histogram of the Retail Price of Computer", subtitle = "In 2018") + theme_classic()
 
 ```
 
 
-```{r 51, fig.asp = 0.8, fig.width = 7}
+```{r 51, fig.asp = 0.8, fig.width = 7,echo=FALSE}
 
 #### Boxplot of the Retail Price of Computer In 2018
 
@@ -107,7 +106,7 @@ Actual_Price <- Retail_Price_and_Dates[Date %in% Max_Date_Retail, ]
 
 ```
 
-```{r 53, fig.asp = 0.8, fig.width = 7}
+```{r 53, fig.asp = 0.8, fig.width = 7,echo=FALSE}
 
 print(paste("Last Recorded Prices are", Actual_Price[1,1], "USD", "and", Actual_Price[2,1],"USD","on the same Day with a mean of",mean(Actual_Price$Retail.Price),"USD"))
 
