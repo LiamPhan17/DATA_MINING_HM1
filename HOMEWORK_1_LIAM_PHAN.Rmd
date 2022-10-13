@@ -33,6 +33,7 @@ library(sp) #spatial data
 library(ggmap) #for map
 library(osmdata) #openstreetmap
 library(reshape2)
+library(plotly)
 
 ```
 
@@ -72,27 +73,32 @@ Retail_Price_and_Dates <- na.omit(Retail_Price_and_Dates)
 
 #### Histogram of the Retail Price of Computer In 2018
 
-ggplot(Retail_Price_and_Dates) +
+ggplotly(
+  ggplot(Retail_Price_and_Dates) +
  aes(x = Retail.Price) +
  geom_histogram(bins = 30L, fill = "#1c6155") +
  labs(x = "Price", y = "Frequency", title = "Histogram of the Retail Price of Computer", subtitle = "In 2018") +
  theme_minimal()
+ )
 
 #### Boxplot of the Retail Price of Computer In 2018
 
+ggplotly(
 ggplot(Retail_Price_and_Dates) +
  aes(x = "", y = Retail.Price) +
  geom_boxplot(fill = "#1c6155") +
  labs(y = "Price", 
  title = "Boxplot of the Retail Price of Computer", subtitle = "In 2018") +
  theme_minimal()
+)
 
 # Actual price
+
 Max_Date_Retail <- max(Retail_Price_and_Dates$Date)
 
 Actual_Price <- Retail_Price_and_Dates[Date %in% Max_Date_Retail, ]
 
-print(paste("Last Recorded Prices are", Actual_Price[1,1], "USD", "and", Actual_Price[2,1],"USD"))
+print(paste("Last Recorded Prices are", Actual_Price[1,1], "USD", "and", Actual_Price[2,1],"USD","on the same Day"))
 
 ```
 
@@ -100,7 +106,7 @@ print(paste("Last Recorded Prices are", Actual_Price[1,1], "USD", "and", Actual_
 
 ```{r 6, fig.asp = 0.8, fig.width = 7}
 
-Retail_Price_and_Dates_Month <- Retail_Price_and_Dates[, mean(Retail.Price), by = floor_date(Date,unit = "month")]
+Retail_Price_and_Dates_Month <- Retail_Price_and_Dates[, mean(Retail.Price), by = floor_date(Date,unit="month")]
 
 colnames(Retail_Price_and_Dates_Month)[2] <- "Mean_Retail_Price"
 
@@ -113,31 +119,37 @@ Retail_Price_and_Dates_Day <- Retail_Price_and_Dates[, mean(Retail.Price), by = 
 colnames(Retail_Price_and_Dates_Day)[2] <- "Mean_Retail_Price"
 
 # Retail Price By Month
-ggplot(Retail_Price_and_Dates_Month) +
+ggplotly(
+  ggplot(Retail_Price_and_Dates_Month) +
  aes(x = floor_date, y = Mean_Retail_Price) +
- geom_step(size = 1.1, 
+ geom_line(size = 1.1, 
  colour = "#112446") +
  labs(x = "Month", y = "Price", title = "Retail Price of Computer in 2018", 
  subtitle = "Aggregated by Month") +
- theme_minimal()
+ theme_classic()
+ )
 
 # Retail Price By Week
-ggplot(Retail_Price_and_Dates_Week) +
+ggplotly(
+  ggplot(Retail_Price_and_Dates_Week) +
  aes(x = floor_date, y = Mean_Retail_Price) +
- geom_step(size = 0.4, 
+ geom_line(size = 0.4, 
  colour = "#112446") +
  labs(x = "Week", y = "Price", title = "Retail Price of Computer in 2018", 
  subtitle = "Aggregated by Week") +
- theme_minimal()
+ theme_classic()
+ )
 
 # Retail Price By Day
-ggplot(Retail_Price_and_Dates_Day) +
+ggplotly(
+  ggplot(Retail_Price_and_Dates_Day) +
  aes(x = floor_date, y = Mean_Retail_Price) +
- geom_step(size = 0.2, 
+ geom_line(size = 0.2, 
  colour = "#112446") +
  labs(x = "Day", y = "Price", title = "Retail Price of Computer in 2018", 
  subtitle = "Aggregated by Day") +
- theme_minimal()
+ theme_classic()
+ )
 
 ```
 
@@ -164,11 +176,13 @@ Retail_Price_Configuration <- na.omit(Retail_Price_Configuration)
 
 #### Boxplot Across Retail Outlets
 
+ggplotly(
 ggplot(Retail_Price_Outlets_Date) +
  aes(x = Store.Postcode, y = Retail.Price) +
  geom_boxplot(fill = "#112446") +
  labs(x = "Stores Postcode", y = "Price", title = "Boxplot Of The Retail Price Across Stores", subtitle = "In 2018") +
- theme_minimal() + scale_x_discrete(guide = guide_axis(n.dodge = 1)) + theme(axis.text.x=element_text(size=rel(1), angle=90))
+ theme_classic() + scale_x_discrete(guide = guide_axis(n.dodge = 1)) + theme(axis.text.x=element_text(size=rel(1), angle=90))
+)
 
 #### Retail Price Across Stores During 2018
 
@@ -178,23 +192,27 @@ colnames(Retail_Price_Outlets_Date_Month)[3] <- "Mean_Retail_Price"
 
 #### Plot of the Monthly Retail Price per Stores
 
+ggplotly(
 ggplot(Retail_Price_Outlets_Date_Month) +
  aes(x = Floor.Date, y = Mean_Retail_Price, colour = Store.Postcode) +
  geom_line(size = 0.5) +
  scale_color_hue(direction = 1) +
  labs(x = "Month", y = "Price", title = "Retail Price Across Months and Grouped by Stores", 
  subtitle = "In 2018") +
- theme_minimal()
+ theme_classic()
+)
 
 #### Plot Of The Retail Price per Configuration
 
+ggplotly(
 ggplot(Retail_Price_Configuration) +
  aes(x = Configuration, y = Retail.Price, colour = Battery.Life..Hours.) +
  geom_point(shape = "circle", size = 0.8) +
  scale_color_gradient() +
  labs(y = "Retail Price", title = "Retail Price and Configuration ", 
  subtitle = "In 2018") +
- theme_minimal()
+ theme_classic()
+)
 
 ``` 
 
@@ -203,6 +221,9 @@ ggplot(Retail_Price_Configuration) +
 #### i.
 
 ```{r 9}
+
+
+
 
 ```
 
@@ -216,12 +237,14 @@ Sales_Stores <- Laptop_Sales_Data_2[, .N, by=Store.Postcode]
 
 #### Plot Most Sales from Stores
 
+ggplotly(
 ggplot(Sales_Stores) +
  aes(x = reorder(Store.Postcode,-N), y = N) +
  geom_col(fill = "#112446") +
  labs(x = "Stores", 
  y = "Number Of Sales", title = "Number of Sales per Store", subtitle = "In 2018") +
- theme_minimal()  + geom_text(aes(label = N), vjust = 1.5, hjust=1.1, colour = "white", angle=90,size=3) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+ theme_classic()  + geom_text(aes(label = N), vjust = 1.5, hjust=1.1, colour = "white", angle=90,size=3) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+)
 
 
 
@@ -242,6 +265,7 @@ ggplot(Sales_Stores) +
 
 Sales_Stores_Revenues <- Laptop_Sales_Data[,.(Volumes=.N, Revenues=sum(Retail.Price, na.rm = TRUE), Configuration), by= Store.Postcode]
 
+ggplotly(
 ggplot(Sales_Stores_Revenues) +
  aes(x = Volumes, y = Revenues, colour = Store.Postcode) +
  geom_point(shape = "circle", 
@@ -249,7 +273,8 @@ ggplot(Sales_Stores_Revenues) +
  scale_color_hue(direction = 1) +
  labs(x = "Volumes", y = "Revenues", title = "Scatterplot Of Sales Volumes VS Sales Revenues ", 
  subtitle = "In 2018", color = "Stores") +
- theme_minimal()
+ theme_classic()
+)
 
 ```
 
@@ -259,7 +284,6 @@ ggplot(Sales_Stores_Revenues) +
 ```{r 13,fig.asp = 0.8, fig.width = 7}
 
 Sales_Stores_Revenues_Configuration_Ratio <- Sales_Stores_Revenues[, ratio_volume_revenue:=Revenues/Volumes]
-
 
 
 
@@ -286,6 +310,7 @@ Stores_Details <- Laptop_Sales_Data[,.(Store.Postcode,Integrated.Wireless.,Bundl
 
 Stores_Details <- na.omit(Stores_Details)
 
+ggplotly(
 ggplot(Stores_Details) +
  aes(x = Store.Postcode, fill = Bundled.Applications.) +
  geom_bar() +
@@ -293,8 +318,10 @@ ggplot(Stores_Details) +
  direction = 1) +
  labs(x = "Stores", y = "Count", title = "Stores Bundled Applications Count", 
  subtitle = "In 2018", fill = "Bundled Application") +
- theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+ theme_classic() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+)
 
+ggplotly(
 ggplot(Stores_Details) +
  aes(x = Store.Postcode, fill = Integrated.Wireless.) +
  geom_bar() +
@@ -302,9 +329,8 @@ ggplot(Stores_Details) +
  direction = 1) +
  labs(x = "Stores", y = "Count", title = "Stores Integrated Wireless Count", 
  subtitle = "In 2018", fill = "Integrated Wireless") +
- theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
-
-
+ theme_classic() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
+)
 
 ```
 
