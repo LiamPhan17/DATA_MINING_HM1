@@ -332,15 +332,11 @@ Sales_Stores_Revenues$Percentage_Revenue <- Sales_Stores_Revenues$Percentage_Rev
 ```{r 12.1, fig.asp = 0.8, fig.width = 7}
 
 ggplot(Sales_Stores_Revenues) +
- aes(x = Store.Postcode, y = Percentage_Revenue) +
+ aes(x = reorder(Store.Postcode,-Percentage_Revenue), y = Percentage_Revenue) +
  geom_col(fill = "#1c6155") +
- labs(x = "Store Postcode", y = "Revenues % of Total Revenues", title = "Revenues Contribution per Stores", 
- subtitle = "In 2018") +
- theme_classic() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
-
-
-
-
+ labs(x = "Store Postcode", y = "% of Total Revenues", title = "Revenues Contribution per Stores", 
+ subtitle = "In 2018") + 
+ theme_classic()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +geom_text(aes(label = round(Percentage_Revenue,1)), vjust = 1.5, hjust=1.1, colour = "white", angle=90,size=3)
 
 ```
 
@@ -348,7 +344,8 @@ ggplot(Sales_Stores_Revenues) +
 
 ```{r 13,fig.asp = 0.8, fig.width = 7}
 
-Sales_Stores_Revenues_Configuration_Ratio <- Sales_Stores_Revenues[, ratio_volume_revenue:=Revenues/Volumes]
+
+
 
 
 ```
@@ -372,6 +369,18 @@ Detail_Price <- na.omit(Detail_Price)
 Stores_Details <- Laptop_Sales_Data[,.(Store.Postcode,Configuration)]
 
 Stores_Details <- na.omit(Stores_Details)
+
+Stores_Details$Configuration <- as.integer(Stores_Details$Configuration)
+
+ggplotly(
+ggplot(Stores_Details) +
+ aes(x = Configuration) +
+ geom_histogram(bins = 30L, fill = "#112446") +
+ labs(x = "Stores ", 
+ y = "Configurations Count", title = "Each Configurations per Stores", subtitle = "In 2018") +
+ theme_classic() +
+ facet_wrap(vars(Store.Postcode), scales = "free_y")
+)
 
 ```
 
