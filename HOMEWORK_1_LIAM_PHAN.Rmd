@@ -12,7 +12,6 @@ output: html_document
 ```{r 1, include=FALSE}
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 rm(list = ls()) # clean environment
-cat("\014") # clean console
 ```
 
 # Loading Packages
@@ -103,19 +102,24 @@ print(paste("Last Recorded Prices are", Actual_Price[1,1], "USD", "and", Actual_
 
 ```{r 6, fig.asp = 0.8, fig.width = 7}
 
+days = list("Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche")
+
 # Aggregating by Month
 Retail_Price_and_Dates_Month <- Retail_Price_and_Dates[, mean(Retail.Price), by = floor_date(Date,unit="month")]
 
+colnames(Retail_Price_and_Dates_Month)[1] <- "Date"
 colnames(Retail_Price_and_Dates_Month)[2] <- "Mean_Retail_Price"
 
 # Aggregating by Week
 Retail_Price_and_Dates_Week <- Retail_Price_and_Dates[, mean(Retail.Price), by = floor_date(Date,unit = "week")]
 
+colnames(Retail_Price_and_Dates_Week)[1] <- "Date"
 colnames(Retail_Price_and_Dates_Week)[2] <- "Mean_Retail_Price"
 
 # Aggregating by Day
 Retail_Price_and_Dates_Day <- Retail_Price_and_Dates[, mean(Retail.Price), by = floor_date(Date,unit = "day")]
 
+colnames(Retail_Price_and_Dates_Day)[1] <- "Date"
 colnames(Retail_Price_and_Dates_Day)[2] <- "Mean_Retail_Price"
 
 # Aggregating by Weekday
@@ -125,15 +129,14 @@ Retail_Price_and_Dates_WeekDay <- Retail_Price_and_Dates_WeekDay[,mean(Retail.Pr
 
 colnames(Retail_Price_and_Dates_WeekDay)[2] <- "Mean_Retail_Price"
 
-Retail_Price_and_Dates_WeekDay <- 
 
 # Retail Price By Month
 RetailPricePlot1 <- ggplotly(
   ggplot(Retail_Price_and_Dates_Month) +
- aes(x = floor_date, y = Mean_Retail_Price) +
+ aes(x = Date, y = Mean_Retail_Price) +
  geom_line(size = 1.1, 
- colour = "#112446") +
- labs(x = "Month", y = "Price", title = "Retail Price of Computer in 2018", 
+ colour = "#1c6155") + geom_point() +
+ labs(x = "Months", y = "Average Retail Pric", title = "Average Retail Price of Computer in 2018", 
  subtitle = "Aggregated by Month") +
  theme_classic()
  )
@@ -143,10 +146,10 @@ RetailPricePlot1
 # Retail Price By Week
 RetailPricePlot2 <- ggplotly(
   ggplot(Retail_Price_and_Dates_Week) +
- aes(x = floor_date, y = Mean_Retail_Price) +
+ aes(x = Date, y = Mean_Retail_Price) +
  geom_line(size = 0.4, 
- colour = "#112446") +
- labs(x = "Week", y = "Price", title = "Retail Price of Computer in 2018", 
+ colour = "#1c6155") + geom_point() +
+ labs(x = "Weeks", y = "Average Retail Pric", title = "Average Retail Price of Computer in 2018", 
  subtitle = "Aggregated by Week") +
  theme_classic()
  )
@@ -156,11 +159,11 @@ RetailPricePlot2
 # Retail Price By Day
 RetailPricePlot3 <- ggplotly(
   ggplot(Retail_Price_and_Dates_Day) +
- aes(x = floor_date, y = Mean_Retail_Price) +
+ aes(x = Date, y = Mean_Retail_Price) +
  geom_line(size = 0.2, 
- colour = "#112446") +
- labs(x = "Day", y = "Price", title = "Retail Price of Computer in 2018", 
- subtitle = "Aggregated by Day") +
+ colour = "#1c6155") + geom_point() +
+ labs(x = "Days", y = "Average Retail Price", title = "Average Retail Price of Computer in 2018", 
+ subtitle = "Aggregated by Day") + 
  theme_classic()
  )
 
@@ -168,8 +171,16 @@ RetailPricePlot3
 
 # Retail Price By Week Day
 
+RetailPricePlot4 <- ggplotly(
+  ggplot(Retail_Price_and_Dates_WeekDay) +
+ aes(x = Weekday, y = Mean_Retail_Price) +
+ geom_col(fill = "#1c6155") +
+ labs(x = "Weekdays", y = "Average Retail Price", title = "Average Retail Price during Weekdays", subtitle = "In 2018") + 
+ theme_classic() + coord_cartesian(ylim = c(500, 510))
+)
 
-# PlotGrid
+RetailPricePlot4
+
 
 
 ```
@@ -200,7 +211,7 @@ Retail_Price_Configuration <- na.omit(Retail_Price_Configuration)
 ggplotly(
 ggplot(Retail_Price_Outlets_Date) +
  aes(x = Store.Postcode, y = Retail.Price) +
- geom_boxplot(fill = "#112446") +
+ geom_boxplot(fill = "#1c6155") +
  labs(x = "Stores Postcode", y = "Price", title = "Boxplot Of The Retail Price Across Stores", subtitle = "In 2018") +
  theme_classic() + scale_x_discrete(guide = guide_axis(n.dodge = 1)) + theme(axis.text.x=element_text(size=rel(1), angle=90))
 )
@@ -213,7 +224,6 @@ colnames(Retail_Price_Outlets_Date_Month)[3] <- "Mean_Retail_Price"
 
 #### Plot of the Monthly Retail Price per Stores
 
-ggplotly(
 ggplot(Retail_Price_Outlets_Date_Month) +
  aes(x = Floor.Date, y = Mean_Retail_Price, colour = Store.Postcode) +
  geom_line(size = 0.5) +
@@ -221,7 +231,7 @@ ggplot(Retail_Price_Outlets_Date_Month) +
  labs(x = "Month", y = "Price", title = "Retail Price Across Months and Grouped by Stores", 
  subtitle = "In 2018") +
  theme_classic()
-)
+
 
 #### Plot Of The Retail Price per Configuration
 
@@ -258,14 +268,13 @@ Sales_Stores <- Laptop_Sales_Data_2[, .N, by=Store.Postcode]
 
 #### Plot Most Sales from Stores
 
-ggplotly(
 ggplot(Sales_Stores) +
  aes(x = reorder(Store.Postcode,-N), y = N) +
  geom_col(fill = "#112446") +
  labs(x = "Stores", 
- y = "Number Of Sales", title = "Number of Sales per Store", subtitle = "In 2018") +
+ y = "Number Of Transactions", title = "Number of Transactions per Store", subtitle = "In 2018") +
  theme_classic()  + geom_text(aes(label = N), vjust = 1.5, hjust=1.1, colour = "white", angle=90,size=3) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-)
+
 
 
 
