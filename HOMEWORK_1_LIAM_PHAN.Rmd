@@ -81,12 +81,14 @@ ggplot(Retail_Price_and_Dates) +
 
 #### Boxplot of the Retail Price of Computer In 2018
 
+ggplotly(
 ggplot(Retail_Price_and_Dates) +
  aes(x = "", y = Retail.Price) +
  geom_boxplot(fill = "#1c6155") +
  labs(y = "Price", 
  title = "Boxplot of the Retail Price of Computer", subtitle = "In 2018") +
  theme_classic()
+)
 
 # Actual price
 
@@ -94,9 +96,9 @@ Max_Date_Retail <- max(Retail_Price_and_Dates$Date)
 
 Actual_Price <- Retail_Price_and_Dates[Date %in% Max_Date_Retail, ]
 
-print(paste("Last Recorded Prices are", Actual_Price[1,1], "USD", "and", Actual_Price[2,1],"USD","on the same Day"))
+print(paste("Last Recorded Prices are", Actual_Price[1,1], "USD", "and", Actual_Price[2,1],"USD","on the same Day with a mean of",mean(Actual_Price$Retail.Price),"USD"))
 
-```
+ ```
 
 #### ii.
 
@@ -201,7 +203,6 @@ Retail_Price_Configuration <- na.omit(Retail_Price_Configuration)
 
 ```
 
-
 ```{r 8, fig.asp = 0.8, fig.width = 7}
 
 #### Price Decomposed by Retail Outlets
@@ -216,7 +217,7 @@ ggplot(Retail_Price_Outlets_Date) +
  theme_classic() + scale_x_discrete(guide = guide_axis(n.dodge = 1)) + theme(axis.text.x=element_text(size=rel(1), angle=90))
 )
 
-#### Retail Price Across Stores During 2018
+#### Retail Price Across Stores During 2018 - Data
 
 Retail_Price_Outlets_Date_Month <- Retail_Price_Outlets_Date[,Floor.Date:=floor_date(Date,unit="month")][,c(Mean_Price=mean(Retail.Price)), by=list(Store.Postcode,Floor.Date)]
 
@@ -235,15 +236,13 @@ ggplot(Retail_Price_Outlets_Date_Month) +
 
 #### Plot Of The Retail Price per Configuration
 
-ggplotly(
 ggplot(Retail_Price_Configuration) +
- aes(x = Configuration, y = Retail.Price, colour = Battery.Life..Hours.) +
- geom_point(shape = "circle", size = 0.8) +
+ aes(x = Configuration, y = Retail.Price) +
+ geom_point(shape = "circle", size = 0.6) +
  scale_color_gradient() +
  labs(y = "Retail Price", title = "Retail Price and Configuration ", 
- subtitle = "In 2018") +
+ subtitle = "In 2018") + geom_smooth()
  theme_classic()
-)
 
 ``` 
 
@@ -270,7 +269,7 @@ Sales_Stores <- Laptop_Sales_Data_2[, .N, by=Store.Postcode]
 
 ggplot(Sales_Stores) +
  aes(x = reorder(Store.Postcode,-N), y = N) +
- geom_col(fill = "#112446") +
+ geom_col(fill = "#1c6155") +
  labs(x = "Stores", 
  y = "Number Of Transactions", title = "Number of Transactions per Store", subtitle = "In 2018") +
  theme_classic()  + geom_text(aes(label = N), vjust = 1.5, hjust=1.1, colour = "white", angle=90,size=3) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
