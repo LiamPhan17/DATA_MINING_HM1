@@ -29,10 +29,10 @@ library(ggplot2)
 library(cowplot)
 library(naniar) #for NA exploration
 library(sp) #spatial data
-library(ggmap) #for map
-library(osmdata) #openstreetmap
 library(reshape2)
 library(plotly)
+library(gissr)
+library(leaflet)
 
 ```
 
@@ -288,7 +288,39 @@ ggplot(Retail_Price_Configuration) +
 #### i. Where are the stores and customers locatd?
 
 
-```{r 9}
+```{r 9, fig.asp = 0.8, fig.width = 7,echo=FALSE} 
+
+#Transform UK to Worldwide Geodata
+
+## For Client Data
+
+Data_Client_Coordinates <- Laptop_Sales_Data[,.(customer.X,customer.Y)]
+
+Data_Client_Coordinates <- na.omit(Data_Client_Coordinates)
+
+Data_Client_Coordinates <- transform_coordinates(Data_Client_Coordinates,
+                                                        latitude="customer.X",longitude = "customer.Y", from = projection_bng(), to = projection_wgs84())
+
+## For Store Data
+
+Data_Stores_Coordinates <- Laptop_Sales_Data[,.(store.X,store.Y)]
+
+Data_Stores_Coordinates <- na.omit(Data_Stores_Coordinates)
+
+Data_Stores_Coordinates <- transform_coordinates(Data_Stores_Coordinates,
+                                                        latitude="store.X",longitude = "store.Y", from = projection_bng(), to = projection_wgs84())
+
+```
+
+
+```{r 82, fig.asp = 0.8, fig.width = 7,echo=FALSE} 
+
+#Ploting Map 
+
+leaflet(data = Data_Stores_Coordinates) %>% addTiles() %>%
+  addMarkers(~store.X, ~store.Y, popup = ~as.character(St), label = ~as.character(mag))
+
+
 
 
 
