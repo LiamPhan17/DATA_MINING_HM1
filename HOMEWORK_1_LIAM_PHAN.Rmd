@@ -317,9 +317,9 @@ Data_Stores_Coordinates <- transform_coordinates(Data_Stores_Coordinates,
 
 #Ploting Map 
 
-leaflet(data = Data_Stores_Coordinates) %>% addTiles() %>%
-  addMarkers(~store.X, ~store.Y)
+map_1 <- leaflet() %>% addTiles()
 
+map_1 
 
 
 
