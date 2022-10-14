@@ -10,15 +10,9 @@ output:
     gallery: false
     highlight: tango
 ---
+# Quick Start
 
-# Ex 3.4
-
-## Settings Up
-
-```{r 1, include=FALSE}
-knitr::opts_chunk$set(warning = FALSE, message = FALSE,fig.align="center")
-rm(list = ls()) # clean environment
-```
+> Most of the plots are interactive, you can click or zoom to get more details ! Also don't hesitate to click on plots, they will zoom automatically ! 
 
 ## Loading Packages
 
@@ -45,9 +39,15 @@ library(DT)
 
 ```
 
+> Those are required packages
+
+
+# Ex 3.4
 ## Loading Datas and Cleaning
 
-```{r 3}
+> Loading the dataset called "LaptopSales_red.csv" given for the Homework
+
+```{r 3,echo=FALSE, warning=FALSE, comment=FALSE}
 
 Laptop_Sales_Data <- fread("DATA/LaptopSales_red.csv")
 
@@ -55,11 +55,22 @@ Laptop_Sales_Data <- fread("DATA/LaptopSales_red.csv")
 
 #summary(Laptop_Sales_Data)
 
-#str(Laptop_Sales_Data)
+str(Laptop_Sales_Data)
+
+```
+
+<center>
+
+```{r 333, echo=FALSE, warning=FALSE, comment=FALSE}
 
 gg_miss_var(Laptop_Sales_Data, show_pct = TRUE)
 
 ```
+
+
+> Retail Price is the only variable missing at rate of approximately 4% 
+
+</center>
 
 ## a.Price Questions:
 
@@ -76,27 +87,32 @@ Retail_Price_and_Dates <- na.omit(Retail_Price_and_Dates)
 
 ### i. At What Price are the laptops actually selling ?
 
+<center>
 
 ```{r 5, echo=FALSE}
 
-#### Histogram of the Retail Price of Computer In 2018
-
+# Histogram of the Retail Price of Computer In 2018
+ggplotly(
 ggplot(Retail_Price_and_Dates) +
  aes(x = Retail.Price) +
  geom_histogram(bins = 30L, fill = "#1c6155") +
  labs(x = "Price", y = "Frequency", title = "Histogram of the Retail Price of Computer", subtitle = "In 2018") + theme_classic()
+)
 
 ```
 
+> This barplot shows the most frequent retail prices for all stores in 2018
 
-```{r 51, echo=FALSE}
+</center>
 
-#### Boxplot of the Retail Price of Computer In 2018
+```{r 51, echo=FALSE, warning=FALSE, comment=FALSE}
+
+# Boxplot of the Retail Price of Computer In 2018
 
 ggplotly(
 ggplot(Retail_Price_and_Dates) +
  aes(x = "", y = Retail.Price) +
- geom_boxplot(fill = "#1c6155") +
+ geom_boxplot(fill = "#1c6155") + stat_summary(fun.y=mean, geom="point", shape=20, size=8, color="white", fill="white") + 
  labs(y = "Price", x="",
  title = "Boxplot of the Retail Price of Computer", subtitle = "In 2018") +
  theme_classic()
@@ -104,6 +120,9 @@ ggplot(Retail_Price_and_Dates) +
 
 ```
 
+</center>
+
+> We can interpret this boxplot as the mean or median retail price of the 2018 Computer Dataset, click on the white sphere to get the mean !
 
 ```{r 52, include=FALSE}
 
@@ -117,9 +136,11 @@ Actual_Price <- Retail_Price_and_Dates[Date %in% Max_Date_Retail, ]
 
 ```{r 53,echo=FALSE}
 
-print(paste("Last Recorded Prices are", Actual_Price[1,1], "USD", "and", Actual_Price[2,1],"USD","on the same Day with a mean of",mean(Actual_Price$Retail.Price),"USD"))
+result1 <- print(paste("Last Recorded Prices are", Actual_Price[1,1], "USD", "and", Actual_Price[2,1],"USD","on the same Day with a mean of",mean(Actual_Price$Retail.Price),"USD"))
 
 ```
+
+> Here is given the last recorded prices for 2018
 
 
 ### ii.Does price change with time?
@@ -150,12 +171,15 @@ colnames(Retail_Price_and_Dates_Day)[2] <- "Mean_Retail_Price"
 Retail_Price_and_Dates_WeekDay <- Retail_Price_and_Dates[,Weekday:=weekdays(Date)]
 Retail_Price_and_Dates_WeekDay <- Retail_Price_and_Dates_WeekDay[,mean(Retail.Price),by=Weekday]
 
-Retail_Price_and_Dates_WeekDay$Weekday <- factor(Retail_Price_and_Dates_WeekDay$Weekday, ordered = TRUE, levels=(c("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche")))
+Retail_Price_and_Dates_WeekDay <- Retail_Price_and_Dates_WeekDay %>% mutate(Translation=c("Saturday","Friday","Wednesday","Monday","Tuesday","Thursday","Sunday"))
+
+Retail_Price_and_Dates_WeekDay$Translation <- factor(Retail_Price_and_Dates_WeekDay$Translation, ordered = TRUE, levels=(c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")))
 
 colnames(Retail_Price_and_Dates_WeekDay)[2] <- "Mean_Retail_Price"
 
 ```
 
+<center>
 
 ```{r 6, echo=FALSE}
 
@@ -202,7 +226,7 @@ RetailPricePlot3
 
 RetailPricePlot4 <- ggplotly(
   ggplot(Retail_Price_and_Dates_WeekDay) +
- aes(x = Weekday, y = Mean_Retail_Price) +
+ aes(x = Translation, y = Mean_Retail_Price) +
  geom_col(fill = "#1c6155") +
  labs(x = "Weekdays", y = "Average Retail Price", title = "Average Retail Price during Weekdays", subtitle = "In 2018") + 
  theme_classic() + coord_cartesian(ylim = c(505, 510))
@@ -212,6 +236,9 @@ RetailPricePlot4
 
 ```
 
+</center>
+
+> Those Plot shows different aggregations levels, can be used depending on the analysis we want, thus the granularity need.
 
 ### iii. Are prices consistent across retail outlets?
 
@@ -231,6 +258,8 @@ Retail_Price_Configuration <- na.omit(Retail_Price_Configuration)
 ```
 
 
+<center>
+
 ```{r 8,echo=FALSE}
 
 #### Boxplot Across Retail Outlets
@@ -245,6 +274,10 @@ ggplot(Retail_Price_Outlets_Date) +
 
 ```
 
+</center>
+
+> Each box plots belongs to a specific stores, we can see a common trend across all stores in 2018
+
 
 ```{r 81, include=FALSE}
 
@@ -256,11 +289,13 @@ colnames(Retail_Price_Outlets_Date_Month)[3] <- "Mean_Retail_Price"
 
 ```
 
+<center>
+
 
 ```{r 83, echo=FALSE}
 
 #### Plot of the Monthly Retail Price per Stores
-
+ggplotly(
 ggplot(Retail_Price_Outlets_Date_Month) +
  aes(x = Floor.Date, y = Mean_Retail_Price, colour = Store.Postcode) +
  geom_line(size = 0.5) +
@@ -268,25 +303,36 @@ ggplot(Retail_Price_Outlets_Date_Month) +
  labs(x = "Month", y = "Price", title = "Retail Price Across Months and Grouped by Stores", 
  subtitle = "In 2018") +
  theme_classic() 
+)
 
 ```
+
+</center>
+
+> Looking at times series, we can see that not all stores have the same time trend, but most of them do.
 
 
 ### iv. How does price change with configuration?
 
 
-```{r 82, echo=FALSE} 
+<center>
+
+```{r 82, echo=FALSE, warning=FALSE, comment=FALSE} 
 
 #### Plot Of The Retail Price per Configuration
-
+ggplotly(
 ggplot(Retail_Price_Configuration) +
  aes(x = Configuration, y = Retail.Price) +
  geom_point(shape = "circle", size = 0.6) +
  scale_color_gradient() +
  labs(y = "Retail Price", title = "Retail Price and Configuration ", 
  subtitle = "In 2018") + geom_smooth() + theme_classic()
-
+)
 ``` 
+
+</center>
+
+> Using an smooth approximator, we can see two differents trends, first a rapid increase in price while being at low configurations, and then the slope tend to stay constant and low, ending with a increase with highest configurations. 
 
 
 ## b.Location Questions
@@ -335,6 +381,8 @@ map_1
 ```
 
 
+> Enjoy looking at each stores and customers in London UK ! You can find there exact location by clicking on them ! 
+
 ### ii. Which stores are selling the most?
 
 
@@ -349,26 +397,37 @@ Sales_Stores_2 <- Laptop_Sales_Data_2[,.(Revenues=sum(Retail.Price, na.rm = TRUE
 ```
 
 
+<center>
+
 ```{r 103, echo=FALSE}
 
-#### Plot Transactions per Stores
+# Plot Transactions per Stores
 
+ggplotly(
 ggplot(Sales_Stores) +
  aes(x = reorder(Store.Postcode,-N), y = N) +
  geom_col(fill = "#1c6155") +
  labs(x = "Stores", 
  y = "Number Of Transactions", title = "Number of Transactions per Store", subtitle = "In 2018") +
- theme_classic()  + geom_text(aes(label = N), vjust = 1.5, hjust=1.1, colour = "white", angle=90,size=3) + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+ theme_classic() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+)
 
 # Plot Revenues per Stores
+
+ggplotly(
 ggplot(Sales_Stores_2) +
  aes(x = reorder(Store.Postcode,-Revenues), y = Revenues) +
  geom_col(fill = "#1c6155") +
  labs(x = "Store Postcode", 
- y = "Revenues", title = "Revenues per Stores", subtitle = "In 2018") + geom_text(aes(label = Revenues), vjust = 1.5, hjust=1.1, colour = "white", angle=90,size=3) + 
+ y = "Revenues", title = "Revenues per Stores", subtitle = "In 2018") + 
  theme_classic()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+)
 
 ```
+
+</center>
+
+> The following barplots show two ways of analyzing the stores sales results: by the number of transactions or the sales revenues they each generated during 2018.
 
 
 ### iii. How far would customers travel to buy a laptop ?
@@ -422,6 +481,9 @@ datatable(All_Distance, colnames = c('Customer X ', 'Customer Y', 'Store X', 'St
 ```
 
 
+> Each Unique Customer can be found here, scroll down and see the distance they need to travel to get to their store.
+
+
 ## c.Revenue Questions
 
 
@@ -441,16 +503,24 @@ Sales_Stores_Revenues$Percentage_Revenue <- Sales_Stores_Revenues$Percentage_Rev
 ```
 
 
+<center>
+
 ```{r 121,echo=FALSE}
 
-ggplot(Sales_Stores_Revenues) +
+ggplotly(
+  ggplot(Sales_Stores_Revenues) +
  aes(x = reorder(Store.Postcode,-Percentage_Revenue), y = Percentage_Revenue) +
  geom_col(fill = "#1c6155") +
  labs(x = "Store Postcode", y = "% of Total Revenues", title = "Revenues Contribution per Stores", 
  subtitle = "In 2018") + 
- theme_classic()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +geom_text(aes(label = round(Percentage_Revenue,1)), vjust = 1.5, hjust=1.1, colour = "white", angle=90,size=3)
+ theme_classic()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+ )
 
 ```
+
+</center>
+
+> You can see the proportional revenues participation of each stores in 2018. 
 
 
 ### ii. How does this relationship depend on the configuration?
@@ -480,7 +550,7 @@ Detail_Price <- na.omit(Detail_Price)
 ```
 
 
-#### ii. Do all stores sell all configurations?
+### ii. Do all stores sell all configurations?
 
 
 ```{r 15, include=FALSE}
@@ -494,8 +564,11 @@ Stores_Details$Configuration <- as.integer(Stores_Details$Configuration)
 ```
 
 
+<center>
+
 ```{r 151,echo=FALSE}
 
+ggplotly(
 ggplot(Stores_Details) +
  aes(x = Configuration) +
  geom_histogram(bins = 30L, fill = "#1c6155") +
@@ -503,6 +576,21 @@ ggplot(Stores_Details) +
  y = "Configurations Count", title = "Each Configurations per Stores", subtitle = "In 2018") +
  theme_classic() +
  facet_wrap(vars(Store.Postcode), scales = "free")
+)
 
 ```
+
+</center>
+
+> With this multiple facets barplots, you can spot which configuration is less or not sold depending on the store.
+
+
+# Ex 4.1
+
+```{r a1, include=FALSE}
+
+rm(list = ls()) # clean environment
+
+```
+
 
