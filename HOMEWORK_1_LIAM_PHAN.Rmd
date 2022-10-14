@@ -10,6 +10,13 @@ output:
     gallery: false
     highlight: tango
 ---
+
+```{r clean, include=FALSE}
+
+rm(list = ls()) # clean environment
+
+```
+
 # Quick Start
 
 > Most of the plots are interactive, you can click or zoom to get more details ! Also don't hesitate to click on plots, they will zoom automatically ! 
@@ -105,6 +112,8 @@ ggplot(Retail_Price_and_Dates) +
 
 </center>
 
+<center>
+
 ```{r 51, echo=FALSE, warning=FALSE, comment=FALSE}
 
 # Boxplot of the Retail Price of Computer In 2018
@@ -112,7 +121,7 @@ ggplot(Retail_Price_and_Dates) +
 ggplotly(
 ggplot(Retail_Price_and_Dates) +
  aes(x = "", y = Retail.Price) +
- geom_boxplot(fill = "#1c6155") + stat_summary(fun.y=mean, geom="point", shape=20, size=8, color="white", fill="white") + 
+ geom_boxplot(fill = "#1c6155") + stat_summary(fun=mean, geom="point", shape=20, size=8, color="white", fill="white") + 
  labs(y = "Price", x="",
  title = "Boxplot of the Retail Price of Computer", subtitle = "In 2018") +
  theme_classic()
@@ -269,7 +278,7 @@ ggplot(Retail_Price_Outlets_Date) +
  aes(x = Store.Postcode, y = Retail.Price) +
  geom_boxplot(fill = "#1c6155") +
  labs(x = "Stores Postcode", y = "Price", title = "Boxplot Of The Retail Price Across Stores", subtitle = "In 2018") +
- theme_classic() + scale_x_discrete(guide = guide_axis(n.dodge = 1)) + theme(axis.text.x=element_text(size=rel(1), angle=90))
+ theme_classic() + scale_x_discrete() + theme(axis.text.x=element_text(size=rel(1), angle=90))
 )
 
 ```
@@ -320,14 +329,14 @@ ggplot(Retail_Price_Outlets_Date_Month) +
 ```{r 82, echo=FALSE, warning=FALSE, comment=FALSE} 
 
 #### Plot Of The Retail Price per Configuration
-ggplotly(
+
 ggplot(Retail_Price_Configuration) +
  aes(x = Configuration, y = Retail.Price) +
  geom_point(shape = "circle", size = 0.6) +
  scale_color_gradient() +
  labs(y = "Retail Price", title = "Retail Price and Configuration ", 
- subtitle = "In 2018") + geom_smooth() + theme_classic()
-)
+ subtitle = "In 2018") + geom_smooth(color='#1c6155') + theme_classic()
+
 ``` 
 
 </center>
@@ -369,6 +378,7 @@ Data_Stores_Coordinates$store.Y <- as.numeric(Data_Stores_Coordinates$store.Y)
 
 ```
 
+<center>
 
 ```{r 84,echo=FALSE} 
 
@@ -380,6 +390,7 @@ map_1
 
 ```
 
+</center>
 
 > Enjoy looking at each stores and customers in London UK ! You can find there exact location by clicking on them ! 
 
@@ -581,6 +592,8 @@ ggplot(Stores_Details) +
 ```
 
 </center>
+
+
 
 > With this multiple facets barplots, you can spot which configuration is less or not sold depending on the store.
 
