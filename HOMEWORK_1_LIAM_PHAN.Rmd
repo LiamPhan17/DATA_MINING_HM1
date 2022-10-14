@@ -295,20 +295,24 @@ ggplot(Retail_Price_Configuration) +
 ## For Client Data
 
 Data_Client_Coordinates <- Laptop_Sales_Data[,.(customer.X,customer.Y)]
-
 Data_Client_Coordinates <- na.omit(Data_Client_Coordinates)
-
+Data_Client_Coordinates <- distinct(Data_Client_Coordinates)
 Data_Client_Coordinates <- transform_coordinates(Data_Client_Coordinates,
-                                                        latitude="customer.X",longitude = "customer.Y", from = projection_bng(), to = projection_wgs84())
+                                                        latitude="customer.Y",longitude = "customer.X", from = projection_bng(), to = projection_wgs84())
+Data_Client_Coordinates$customer.X <- as.numeric(Data_Client_Coordinates$customer.X)
+Data_Client_Coordinates$customer.Y <- as.numeric(Data_Client_Coordinates$customer.Y)
 
 ## For Store Data
 
 Data_Stores_Coordinates <- Laptop_Sales_Data[,.(store.X,store.Y)]
-
 Data_Stores_Coordinates <- na.omit(Data_Stores_Coordinates)
-
+Data_Stores_Coordinates <- distinct(Data_Stores_Coordinates)
 Data_Stores_Coordinates <- transform_coordinates(Data_Stores_Coordinates,
-                                                        latitude="store.X",longitude = "store.Y", from = projection_bng(), to = projection_wgs84())
+                                                        latitude="store.Y",longitude = "store.X", from = projection_bng(), to = projection_wgs84())
+
+Data_Stores_Coordinates$store.X <- as.numeric(Data_Stores_Coordinates$store.X)
+Data_Stores_Coordinates$store.Y <- as.numeric(Data_Stores_Coordinates$store.Y)
+
 
 ```
 
@@ -317,9 +321,9 @@ Data_Stores_Coordinates <- transform_coordinates(Data_Stores_Coordinates,
 
 #Ploting Map 
 
-map_1 <- leaflet() %>% addTiles()
+map_1 <- leaflet() %>% addTiles() %>% addMarkers(data=Data_Client_Coordinates, lng = ~Data_Client_Coordinates$customer.X, lat = ~Data_Client_Coordinates$customer.Y, clusterOptions = markerClusterOptions())
 
-map_1 
+map_1
 
 
 
