@@ -2,19 +2,25 @@
 title: "HOMEWORK 1 - Creating Value Through Data Mining (S402010)"
 author: "Liam Phan"
 date: "`r Sys.Date()`"
-output: html_document
+output:
+  rmdformats::material :
+    self_contained: true
+    thumbnails: true
+    lightbox: true
+    gallery: false
+    highlight: tango
 ---
 
-# HOMEWORK 1 
+# Ex 3.4
 
 ## Settings Up
 
 ```{r 1, include=FALSE}
-knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE,fig.align="center")
 rm(list = ls()) # clean environment
 ```
 
-# Loading Packages
+## Loading Packages
 
 ```{r 2, warning=FALSE, message=FALSE }
 
@@ -33,12 +39,15 @@ library(reshape2)
 library(plotly)
 library(gissr)
 library(leaflet)
+library(leaflet.providers)
+library(geosphere)
+library(DT)
 
 ```
 
 ## Loading Datas and Cleaning
 
-```{r 3, fig.asp = 0.8, fig.width = 7}
+```{r 3}
 
 Laptop_Sales_Data <- fread("DATA/LaptopSales_red.csv")
 
@@ -52,11 +61,9 @@ gg_miss_var(Laptop_Sales_Data, show_pct = TRUE)
 
 ```
 
-## EX 3.4 
+## a.Price Questions:
 
-### a.Price Questions:
-
-```{r 4, fig.asp = 0.8, fig.width = 7, include=FALSE}
+```{r 4, include=FALSE}
 
 #### Set Up a Data Subset and NA OMIT
 
@@ -67,10 +74,10 @@ Retail_Price_and_Dates <- na.omit(Retail_Price_and_Dates)
 ```
 
 
-#### i. At What Price are the laptops actually selling ?
+### i. At What Price are the laptops actually selling ?
 
 
-```{r 5, fig.asp = 0.8, fig.width = 7, echo=FALSE}
+```{r 5, echo=FALSE}
 
 #### Histogram of the Retail Price of Computer In 2018
 
@@ -82,7 +89,7 @@ ggplot(Retail_Price_and_Dates) +
 ```
 
 
-```{r 51, fig.asp = 0.8, fig.width = 7,echo=FALSE}
+```{r 51, echo=FALSE}
 
 #### Boxplot of the Retail Price of Computer In 2018
 
@@ -98,7 +105,7 @@ ggplot(Retail_Price_and_Dates) +
 ```
 
 
-```{r 52, fig.asp = 0.8, fig.width = 7, include=FALSE}
+```{r 52, include=FALSE}
 
 # Actual price
 
@@ -108,17 +115,17 @@ Actual_Price <- Retail_Price_and_Dates[Date %in% Max_Date_Retail, ]
 
 ```
 
-```{r 53, fig.asp = 0.8, fig.width = 7,echo=FALSE}
+```{r 53,echo=FALSE}
 
 print(paste("Last Recorded Prices are", Actual_Price[1,1], "USD", "and", Actual_Price[2,1],"USD","on the same Day with a mean of",mean(Actual_Price$Retail.Price),"USD"))
 
 ```
 
 
-#### ii.Does price change with time?
+### ii.Does price change with time?
 
 
-```{r 61, fig.asp = 0.8, fig.width = 7, include=FALSE}
+```{r 61, include=FALSE}
 
 # Aggregating by Month
 Retail_Price_and_Dates_Month <- Retail_Price_and_Dates[, mean(Retail.Price), by = floor_date(Date,unit="month")]
@@ -150,7 +157,7 @@ colnames(Retail_Price_and_Dates_WeekDay)[2] <- "Mean_Retail_Price"
 ```
 
 
-```{r 6, fig.asp = 0.8, fig.width = 7, echo=FALSE}
+```{r 6, echo=FALSE}
 
 # Retail Price By Month
 RetailPricePlot1 <- ggplotly(
@@ -206,10 +213,10 @@ RetailPricePlot4
 ```
 
 
-#### iii. Are prices consistent across retail outlets?
+### iii. Are prices consistent across retail outlets?
 
 
-```{r 7, fig.asp = 0.8, fig.width = 7, include=FALSE}
+```{r 7, include=FALSE}
 
 #### Set Up a Data Subset and NA OMIT
 
@@ -224,7 +231,7 @@ Retail_Price_Configuration <- na.omit(Retail_Price_Configuration)
 ```
 
 
-```{r 8, fig.asp = 0.8, fig.width = 7,echo=FALSE}
+```{r 8,echo=FALSE}
 
 #### Boxplot Across Retail Outlets
 
@@ -239,7 +246,7 @@ ggplot(Retail_Price_Outlets_Date) +
 ```
 
 
-```{r 81, fig.asp = 0.8, fig.width = 7, include=FALSE}
+```{r 81, include=FALSE}
 
 #### Retail Price Across Stores During 2018 - Data
 
@@ -250,7 +257,7 @@ colnames(Retail_Price_Outlets_Date_Month)[3] <- "Mean_Retail_Price"
 ```
 
 
-```{r 83, fig.asp = 0.8, fig.width = 7,echo=FALSE}
+```{r 83, echo=FALSE}
 
 #### Plot of the Monthly Retail Price per Stores
 
@@ -265,10 +272,10 @@ ggplot(Retail_Price_Outlets_Date_Month) +
 ```
 
 
-#### iv. How does price change with configuration?
+### iv. How does price change with configuration?
 
 
-```{r 82, fig.asp = 0.8, fig.width = 7,echo=FALSE} 
+```{r 82, echo=FALSE} 
 
 #### Plot Of The Retail Price per Configuration
 
@@ -282,13 +289,13 @@ ggplot(Retail_Price_Configuration) +
 ``` 
 
 
-### b.Location Questions
+## b.Location Questions
 
 
-#### i. Where are the stores and customers locatd?
+### i. Where are the stores and customers locatd?
 
 
-```{r 9, fig.asp = 0.8, fig.width = 7,echo=FALSE} 
+```{r 9, echo=FALSE} 
 
 #Transform UK to Worldwide Geodata
 
@@ -317,25 +324,21 @@ Data_Stores_Coordinates$store.Y <- as.numeric(Data_Stores_Coordinates$store.Y)
 ```
 
 
-```{r 82, fig.asp = 0.8, fig.width = 7,echo=FALSE} 
+```{r 84,echo=FALSE} 
 
 #Ploting Map 
 
-map_1 <- leaflet() %>% addTiles() %>% addMarkers(data=Data_Client_Coordinates, lng = ~Data_Client_Coordinates$customer.X, lat = ~Data_Client_Coordinates$customer.Y, clusterOptions = markerClusterOptions())
+map_1 <- leaflet() %>% addProviderTiles(providers$CartoDB.Positron) %>% addMarkers(data=Data_Client_Coordinates, lng = ~Data_Client_Coordinates$customer.X, lat = ~Data_Client_Coordinates$customer.Y,icon = list(iconUrl='https://cdn-icons-png.flaticon.com/512/4573/4573516.png',iconSize=c(25,25)), clusterOptions = markerClusterOptions(),popup = ~paste("<h3>Client Coordinates</h3>","<b>Latitude:</b>",customer.X,"<b>Longitude:</b>",customer.Y)) %>% addMarkers(data=Data_Stores_Coordinates, lng = ~Data_Stores_Coordinates$store.X, lat = ~Data_Stores_Coordinates$store.Y,icon = list(iconUrl='https://cdn-icons-png.flaticon.com/512/726/726569.png',iconSize=c(25,25)), clusterOptions = markerClusterOptions(), popup = ~paste("<h3>Store Coordinates</h3>","<b>Latitude:</b>",store.X,"<b>Longitude:</b>",store.Y))
 
 map_1
-
-
-
-
 
 ```
 
 
-#### ii. Which stores are selling the most?
+### ii. Which stores are selling the most?
 
 
-```{r 10, fig.asp = 0.8, fig.width = 7, include=FALSE}
+```{r 10, include=FALSE}
 
 Laptop_Sales_Data_2 <- Laptop_Sales_Data
 
@@ -346,7 +349,7 @@ Sales_Stores_2 <- Laptop_Sales_Data_2[,.(Revenues=sum(Retail.Price, na.rm = TRUE
 ```
 
 
-```{r 103, fig.asp = 0.8, fig.width = 7,echo=FALSE}
+```{r 103, echo=FALSE}
 
 #### Plot Transactions per Stores
 
@@ -368,33 +371,64 @@ ggplot(Sales_Stores_2) +
 ```
 
 
-#### iii. How far stores are selling the most?
+### iii. How far would customers travel to buy a laptop ?
 
 
 ```{r 11}
 
 
 
-```
-
-
-#### iv. How far stores are selling the most? - Alternative
-
-
-```{r 111}
-
 
 
 ```
 
 
-### c.Revenue Questions
+### iv. How far would customers travel to buy a laptop ? - Alternative
 
 
-#### i. How do the sales volume in each store relate to Acell's revenues?
+```{r 111, include=FALSE}
+
+# Distance Calculations
+
+Distance_Customer_Shop_Data <- Laptop_Sales_Data[, .(customer.X,customer.Y,store.X,store.Y)]
+
+Distance_Customer_Shop_Data <- distinct(Distance_Customer_Shop_Data)
+
+Distance_Customer_Shop_Data <- na.omit(Distance_Customer_Shop_Data)
+
+Distance_Customer_Shop_Data$customer.X <- as.numeric(Distance_Customer_Shop_Data$customer.X)
+Distance_Customer_Shop_Data$customer.Y <- as.numeric(Distance_Customer_Shop_Data$customer.Y)
+Distance_Customer_Shop_Data$store.X <- as.numeric(Distance_Customer_Shop_Data$store.X)
+Distance_Customer_Shop_Data$store.Y <- as.numeric(Distance_Customer_Shop_Data$store.Y)
+
+Distance_Customer <- transform_coordinates(Distance_Customer_Shop_Data, latitude="customer.Y",longitude = "customer.X", from = projection_bng(), to = projection_wgs84())
+
+Distance_Customer <- Distance_Customer[,c(1,2)]
+
+Distance_Store <- transform_coordinates(Distance_Customer_Shop_Data, latitude="store.Y",longitude = "store.X", from = projection_bng(), to = projection_wgs84())
+
+Distance_Store <- Distance_Store[,c(3,4)]
+
+All_Distance <- cbind(Distance_Customer,Distance_Store)
+
+All_Distance <- All_Distance %>% rowwise() %>% mutate(Distance=distHaversine(c(customer.Y,customer.X),c(store.Y,store.X)))
+
+```
+
+```{r 1111,echo=FALSE}
+
+datatable(All_Distance, colnames = c('Customer X ', 'Customer Y', 'Store X', 'Store Y', 'Distance Between Them in Meters'))
+
+```
 
 
-```{r 12, fig.asp = 0.8, fig.width = 7, include=FALSE}
+## c.Revenue Questions
+
+
+### i. How do the sales volume in each store relate to Acell's revenues?
+
+
+```{r 12, include=FALSE}
 
 Sales_Stores_Revenues <- Laptop_Sales_Data[,.(Revenues=sum(Retail.Price, na.rm = TRUE)), by= Store.Postcode]
 
@@ -407,7 +441,7 @@ Sales_Stores_Revenues$Percentage_Revenue <- Sales_Stores_Revenues$Percentage_Rev
 ```
 
 
-```{r 121, fig.asp = 0.8, fig.width = 7,echo=FALSE}
+```{r 121,echo=FALSE}
 
 ggplot(Sales_Stores_Revenues) +
  aes(x = reorder(Store.Postcode,-Percentage_Revenue), y = Percentage_Revenue) +
@@ -419,10 +453,10 @@ ggplot(Sales_Stores_Revenues) +
 ```
 
 
-#### ii. How does this relationship depend on the configuration?
+### ii. How does this relationship depend on the configuration?
 
 
-```{r 13,fig.asp = 0.8, fig.width = 7}
+```{r 13}
 
 
 
@@ -431,13 +465,13 @@ ggplot(Sales_Stores_Revenues) +
 ```
 
 
-### d.Configuration Questions 
+## d.Configuration Questions 
 
 
-#### i. What are the details of each configuration? How does this relate to price?
+### i. What are the details of each configuration? How does this relate to price?
 
 
-```{r 14, fig.asp = 0.8, fig.width = 7, include=FALSE}
+```{r 14,include=FALSE}
 
 Detail_Price <- Laptop_Sales_Data[,.(Retail.Price,Screen.Size..Inches.,Battery.Life..Hours.,RAM..GB.,Processor.Speeds..GHz.,HD.Size..GB.)]
 
@@ -449,7 +483,7 @@ Detail_Price <- na.omit(Detail_Price)
 #### ii. Do all stores sell all configurations?
 
 
-```{r 15,fig.asp = 0.8, fig.width = 7, include=FALSE}
+```{r 15, include=FALSE}
 
 Stores_Details <- Laptop_Sales_Data[,.(Store.Postcode,Configuration)]
 
@@ -460,7 +494,7 @@ Stores_Details$Configuration <- as.integer(Stores_Details$Configuration)
 ```
 
 
-```{r 151,fig.asp = 0.8, fig.width = 7,echo=FALSE}
+```{r 151,echo=FALSE}
 
 ggplot(Stores_Details) +
  aes(x = Configuration) +
