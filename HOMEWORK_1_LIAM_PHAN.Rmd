@@ -11,7 +11,7 @@ output:
     highlight: tango
 ---
 
-# Quick Start
+# <span style="color: #1c6155;">Quick Start</span> 
 
 > Most of the plots are interactive, you can click or zoom to get more details ! Also don't hesitate to click on plots, they will zoom automatically ! 
 
@@ -47,7 +47,7 @@ library(rmdformats)
 > Those are required packages
 
 
-# Ex 3.4
+# <span style="color: #1c6155;">Ex 3.4</span> 
 
 ```{r clean, include=FALSE}
 
@@ -702,7 +702,7 @@ ggplot(Stores_Details) +
 > With this multiple facets barplots, you can spot which configuration is less or not sold depending on the store.
 
 
-# Ex 4.1
+# <span style="color: #1c6155;">Ex 4.1</span> 
 
 ```{r a1, include=FALSE}
 
