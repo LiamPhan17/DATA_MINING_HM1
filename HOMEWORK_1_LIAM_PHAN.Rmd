@@ -859,6 +859,10 @@ grid.arrange(Histo_Graph_1,Histo_Graph_2,Histo_Graph_3,Histo_Graph_4,Histo_Graph
 
 </center>
 
+<center>
+
+> Standards Errors
+
 ```{r b4, echo=FALSE, warning=FALSE, comment=FALSE}
 
 quantitative_sd <- sapply(Histo_Cereals_Data,sd,na.rm=TRUE)
