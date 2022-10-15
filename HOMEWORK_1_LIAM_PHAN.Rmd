@@ -761,6 +761,7 @@ b_result
 ```
 
 
+
 </center>
 
 <center>
@@ -779,6 +780,8 @@ b_sd
 
 
 ## c.
+
+<center>
 
 > Histogram of Quantitative Variables
 
@@ -843,6 +846,7 @@ Histo_Graph_11 <- ggplot(Histo_Cereals_Data) +
 
 ```
 
+</center>
 
 <center>
 
@@ -862,6 +866,8 @@ quantitative_sd <- sapply(Histo_Cereals_Data,sd,na.rm=TRUE)
 quantitative_sd
 
 ```
+
+</center>
 
 ### i. Which vairables have the largest variability?
 
