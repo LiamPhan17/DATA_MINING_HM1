@@ -780,6 +780,8 @@ b_sd
 
 ## c.
 
+> Histogram of Quantitative Variables
+
 ```{r b2, echo=FALSE, warning=FALSE, comment=FALSE}
 
 Histo_Cereals_Data <- Cereals_Data[,c("calories","protein","fat","sodium" ,"sugars","potass","weight","cups","rating","fiber","carbo")]
@@ -922,6 +924,8 @@ ggplot(Cereals_Data) +
 
 <center>
 
+> Correlation Matrix
+
 ```{r f, echo=FALSE, warning=FALSE, comment=FALSE}
 
 Corr_Data <- Cereals_Data[,c("calories","protein","fat","sodium" ,"sugars","potass","weight","cups","rating","fiber","carbo")]
@@ -985,6 +989,8 @@ corrplot(Corr_plot, method = "color", col=brewer.pal(n=8, name="BuGn"),tl.col="b
 ### iii. How would the correlations change if we normalized the data first?
 
 <center>
+
+> Correlation Matrix
 
 ```{r f5, echo=FALSE, warning=FALSE, comment=FALSE}
 
