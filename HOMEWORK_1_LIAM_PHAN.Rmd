@@ -661,7 +661,6 @@ b_result
 
 ```
 
-</center>
 
 </center>
 
@@ -765,7 +764,7 @@ quantitative_sd
 
 ### i. Which vairables have the largest variability?
 
-> Based on the Histogram Grid and the Standard Errors Summary, Sodium, Potass and Calories have the largest variability
+> Based on the Histogram Grid and the Standard Errors Summary, Sodium, Potass and Calories have the largest variability.
 
 ### ii. Which variables seem skedew?
 
@@ -827,6 +826,8 @@ ggplot(Cereals_Data) +
 ```{r f, echo=FALSE, warning=FALSE, comment=FALSE}
 
 Corr_Data <- Cereals_Data[,c("calories","protein","fat","sodium" ,"sugars","potass","weight","cups","rating","fiber","carbo")]
+
+Corr_Data <- na.omit(Corr_Data)
 
 Corr_plot <- cor(Corr_Data)
 
@@ -923,7 +924,7 @@ corrplot(Corr_plot_scale, method = "color", col=brewer.pal(n=8, name="PuBuGn"),t
 
 </center>
 
-
+> Nothing changes when we normalized the data before correlation matrices and plots
 
 
 
