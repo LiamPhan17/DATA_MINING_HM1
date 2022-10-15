@@ -11,8 +11,6 @@ output:
     highlight: tango
 ---
 
-
-
 # Quick Start
 
 > Most of the plots are interactive, you can click or zoom to get more details ! Also don't hesitate to click on plots, they will zoom automatically ! 
@@ -614,7 +612,7 @@ rm(list = ls()) # clean environment
 
 ## Loading Datas and Cleaning
 
-> Loading the dataset called "LaptopSales_red.csv" given for the Homework
+> Loading the dataset called "Cereals.csv" given for the Homework
 
 ```{r a2,echo=FALSE, warning=FALSE, comment=FALSE}
 
@@ -651,7 +649,7 @@ gg_miss_var(Cereals_Data, show_pct = TRUE)
 
 <center>
 
-### Summary
+> Summary
 
 ```{r b1, echo=FALSE, warning=FALSE, comment=FALSE}
 
@@ -667,7 +665,7 @@ b_result
 
 <center>
 
-### Standard Errors 
+> Standard Errors 
 
 ```{r b11, echo=FALSE, warning=FALSE, comment=FALSE}
 
