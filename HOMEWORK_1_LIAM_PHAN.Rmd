@@ -350,7 +350,6 @@ ggplot(Retail_Price_Configuration) +
 
 ## b.Location Questions
 
-
 ### i. Where are the stores and customers locatd?
 
 
@@ -498,6 +497,27 @@ datatable(All_Distance, colnames = c('Customer X ', 'Customer Y', 'Store X', 'St
 
 > Each Unique Customer can be found here, scroll down and see the distance they need to travel to get to their store.
 
+<center>
+
+```{r 1121,echo=FALSE}
+
+ggplotly(
+  
+ggplot(All_Distance) +
+ aes(x = Distance) +
+ geom_histogram(bins = 60L, fill = "#1c6155") +
+ labs(x = "Distance (in meters)", 
+ title = "Histogram of the Distance between Clients and Stores", subtitle = "In 2018") +
+ theme_classic()
+
+)
+
+
+```
+
+</center>
+
+> Histogram of the Distance between Clients and Stores
 
 ## c.Revenue Questions
 
@@ -541,14 +561,15 @@ ggplotly(
 ### ii. How does this relationship depend on the configuration?
 
 
-```{r 13}
+<center>
 
-
+```{r 1313, echo=FALSE}
 
 
 
 ```
 
+</center>
 
 ## d.Configuration Questions 
 
@@ -556,14 +577,92 @@ ggplotly(
 ### i. What are the details of each configuration? How does this relate to price?
 
 
-```{r 14,include=FALSE}
+<center>
 
-Detail_Price <- Laptop_Sales_Data[,.(Retail.Price,Screen.Size..Inches.,Battery.Life..Hours.,RAM..GB.,Processor.Speeds..GHz.,HD.Size..GB.)]
+```{r 14,echo=FALSE}
+
+Detail_Price <- Laptop_Sales_Data[,.(Retail.Price,Screen.Size..Inches.,Battery.Life..Hours.,RAM..GB.,Processor.Speeds..GHz.,HD.Size..GB.,Integrated.Wireless.,Bundled.Applications.)]
 
 Detail_Price <- na.omit(Detail_Price)
 
+# Screen Size
+
+detail_plot1 <- ggplot(Detail_Price) +
+ aes(x = "", y = Retail.Price) +
+ geom_violin(adjust = 1L, scale = "area", fill = "#1c6155") +
+ labs(x = "Screen Size (Inches)", y = "Retail Price", title = "Retail Price compared to Screen Size", 
+ subtitle = "In 2018") +
+ theme_classic() +
+ facet_wrap(vars(Screen.Size..Inches.)) + theme(text = element_text(size = 6))    
+ 
+# Battery Life
+
+detail_plot2 <- ggplot(Detail_Price) +
+ aes(x = "", y = Retail.Price) +
+ geom_violin(adjust = 1L, scale = "area", fill = "#1c6155") +
+ labs(x = "Battery Life (Hours)", y = "Retail Price", title = "Retail Price compared to Battery Life", 
+ subtitle = "In 2018") +
+ theme_classic() +
+ facet_wrap(vars(Battery.Life..Hours.)) + theme(text = element_text(size = 6))    
+
+# RAM 
+
+detail_plot3 <- ggplot(Detail_Price) +
+ aes(x = "", y = Retail.Price) +
+ geom_violin(adjust = 1L, scale = "area", fill = "#1c6155") +
+ labs(x = "RAM (GB)", y = "Retail Price", title = "Retail Price compared to RAM", 
+ subtitle = "In 2018") +
+ theme_classic() +
+ facet_wrap(vars(RAM..GB.)) + theme(text = element_text(size = 6))   
+
+# Processor Speed
+
+detail_plot4 <- ggplot(Detail_Price) +
+ aes(x = "", y = Retail.Price) +
+ geom_violin(adjust = 1L, scale = "area", fill = "#1c6155") +
+ labs(x = "Processor Speeds (GHz)", y = "Retail Price", title = "Retail Price compared to Processor Speed", 
+ subtitle = "In 2018") +
+ theme_classic() +
+ facet_wrap(vars(Processor.Speeds..GHz.)) + theme(text = element_text(size = 6))    
+
+# HD Size
+
+detail_plot5 <- ggplot(Detail_Price) +
+ aes(x = "", y = Retail.Price) +
+ geom_violin(adjust = 1L, scale = "area", fill = "#1c6155") +
+ labs(x = "HD Size (GB)", y = "Retail Price", title = "Retail Price compared to Hard Drive size", 
+ subtitle = "In 2018") +
+ theme_classic() +
+ facet_wrap(vars(HD.Size..GB.)) + theme(text = element_text(size = 12))    
+
+# Wireless
+
+detail_plot6 <- ggplot(Detail_Price) +
+ aes(x = "", y = Retail.Price) +
+ geom_violin(adjust = 1L, scale = "area", fill = "#1c6155") +
+ labs(x = "Integrated Wireless", y = "Retail Price", title = "Retail Price compared to Integrated Wireless", 
+ subtitle = "In 2018") +
+ theme_classic() +
+ facet_wrap(vars(Integrated.Wireless.)) + theme(text = element_text(size = 6))   
+
+# Bundled Applications
+
+detail_plot7 <- ggplot(Detail_Price) +
+ aes(x = "", y = Retail.Price) +
+ geom_violin(adjust = 1L, scale = "area", fill = "#1c6155") +
+ labs(x = "Bundled Applications", y = "Retail Price", title = "Retail Price compared to Bundled Applications", 
+ subtitle = "In 2018") +
+ theme_classic() +
+ facet_wrap(vars(Bundled.Applications.)) + theme(text = element_text(size = 6))   
+
+# All Together
+
+grid.arrange(detail_plot1,detail_plot2,detail_plot3,detail_plot4,detail_plot6,detail_plot7)
+grid.arrange(detail_plot5)
+
 ```
 
+</center>
 
 ### ii. Do all stores sell all configurations?
 
