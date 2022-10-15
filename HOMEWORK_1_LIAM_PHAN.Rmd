@@ -43,6 +43,9 @@ library(leaflet)
 library(leaflet.providers)
 library(geosphere)
 library(DT)
+library(gridExtra)
+library(corrplot)
+library(RColorBrewer)
 
 ```
 
@@ -605,5 +608,275 @@ ggplot(Stores_Details) +
 rm(list = ls()) # clean environment
 
 ```
+
+## Loading Datas and Cleaning
+
+> Loading the dataset called "LaptopSales_red.csv" given for the Homework
+
+```{r a2,echo=FALSE, warning=FALSE, comment=FALSE}
+
+Cereals_Data <- fread("DATA/Cereals.csv")
+
+#is.data.table(Cereals_Data)
+
+str(Cereals_Data)
+
+```
+
+
+<center>
+
+
+```{r a3, echo=FALSE, warning=FALSE, comment=FALSE}
+
+gg_miss_var(Cereals_Data, show_pct = TRUE)
+
+```
+
+</center>
+
+## a.
+
+> Ordinal: shelf,vitamins
+
+> Nominal: name, mfr, type    
+
+> Quantitative/Numerical: calories,protein,fat,sodium ,sugars,potass,weight,cups,rating,fiber,carbo      
+
+
+## b.
+
+<center>
+
+### Summary
+
+```{r b1, echo=FALSE, warning=FALSE, comment=FALSE}
+
+Cereals_Data <- na.omit(Cereals_Data)
+
+b_result <- summary(Cereals_Data)
+
+b_result
+
+```
+
+</center>
+
+<center>
+
+### Standard Errors 
+
+```{r b11, echo=FALSE, warning=FALSE, comment=FALSE}
+
+b_sd <- sapply(Cereals_Data,sd,na.rm=TRUE)
+
+b_sd
+
+```
+
+</center>
+
+
+## c.
+
+```{r b2, echo=FALSE, warning=FALSE, comment=FALSE}
+
+Histo_Cereals_Data <- Cereals_Data[,c("calories","protein","fat","sodium" ,"sugars","potass","weight","cups","rating","fiber","carbo")]
+
+Histo_Graph_1 <- ggplot(Histo_Cereals_Data) +
+ aes(x = calories) +
+ geom_histogram(bins = 30L, fill = "#1c6155") +
+ theme_classic()
+
+Histo_Graph_2 <- ggplot(Histo_Cereals_Data) +
+ aes(x = protein) +
+ geom_histogram(bins = 30L, fill = "#1c6155") +
+ theme_classic()
+
+Histo_Graph_3 <- ggplot(Histo_Cereals_Data) +
+ aes(x = sugars) +
+ geom_histogram(bins = 30L, fill = "#1c6155") +
+ theme_classic()
+
+Histo_Graph_4 <- ggplot(Histo_Cereals_Data) +
+ aes(x = potass) +
+ geom_histogram(bins = 30L, fill = "#1c6155") +
+ theme_classic()
+
+Histo_Graph_5 <- ggplot(Histo_Cereals_Data) +
+ aes(x = weight) +
+ geom_histogram(bins = 30L, fill = "#1c6155") +
+ theme_classic()
+
+Histo_Graph_6 <- ggplot(Histo_Cereals_Data) +
+ aes(x = cups) +
+ geom_histogram(bins = 30L, fill = "#1c6155") +
+ theme_classic()
+
+Histo_Graph_7 <- ggplot(Histo_Cereals_Data) +
+ aes(x = rating) +
+ geom_histogram(bins = 30L, fill = "#1c6155") +
+ theme_classic()
+
+Histo_Graph_8 <- ggplot(Histo_Cereals_Data) +
+ aes(x = fiber) +
+ geom_histogram(bins = 30L, fill = "#1c6155") +
+ theme_classic()
+
+Histo_Graph_9 <- ggplot(Histo_Cereals_Data) +
+ aes(x = carbo) +
+ geom_histogram(bins = 30L, fill = "#1c6155") +
+ theme_classic()
+
+Histo_Graph_10 <- ggplot(Histo_Cereals_Data) +
+ aes(x = sodium) +
+ geom_histogram(bins = 30L, fill = "#1c6155") +
+ theme_classic()
+
+Histo_Graph_11 <- ggplot(Histo_Cereals_Data) +
+ aes(x = fat) +
+ geom_histogram(bins = 30L, fill = "#1c6155") +
+ theme_classic()
+
+```
+
+
+<center>
+
+
+```{r b3, echo=FALSE, warning=FALSE, comment=FALSE}
+
+grid.arrange(Histo_Graph_1,Histo_Graph_2,Histo_Graph_3,Histo_Graph_4,Histo_Graph_5,Histo_Graph_6,Histo_Graph_7,Histo_Graph_8,Histo_Graph_9,Histo_Graph_10,Histo_Graph_11)
+
+```
+
+</center>
+
+```{r b4, echo=FALSE, warning=FALSE, comment=FALSE}
+
+quantitative_sd <- sapply(Histo_Cereals_Data,sd,na.rm=TRUE)
+
+quantitative_sd
+
+```
+
+### i.
+
+> Based on the Histogram Grid and the Standard Errors Summary, Sodium, Potass and Calories have the largest variability
+
+### ii.
+
+> Potassium, Rating, Fiber and Fat seem skewed. Sugar could also be. 
+
+### iii.
+
+> We can see that Fiber as at least 2 extremes values (2 classes away from the main cluster), calories and weight as well. Cups could also have extremes values. 
+
+## d.
+
+<center>
+
+```{r d, echo=FALSE, warning=FALSE, comment=FALSE}
+
+ggplot(Cereals_Data) +
+ aes(x = type, y = calories) +
+ geom_boxplot(fill = "#1c6155") +
+ labs(x = "Type", 
+ y = "Calories", title = "Calories in Hot VS Cold Cereals", subtitle = "Side-by-side Boxplots") +
+ theme_classic()
+
+```
+
+</center>
+
+> We are lacking data about Hot Type Cereals to compare it. 
+
+## e.
+
+<center>
+
+```{r e, echo=FALSE, warning=FALSE, comment=FALSE}
+
+ggplotly(
+ggplot(Cereals_Data) +
+ aes(x = "", y = rating) +
+ geom_boxplot(fill = "#1c6155") +
+ labs(x = "Shelf Height", 
+ y = "Rating", title = "Rating grouped by Shelf Height", subtitle = "Side-by-side Boxplots") +
+ theme_classic() +
+ facet_wrap(vars(shelf))
+)
+
+```
+
+</center>
+
+> Shelf 1 and 3 are pretty close (both median close to 40-42), we could only take a mean of category 1 et 3 and then predict with category 2. 
+
+## f.
+
+### i.
+
+<center>
+
+```{r f, echo=FALSE, warning=FALSE, comment=FALSE}
+
+Corr_Data <- Cereals_Data[,c("calories","protein","fat","sodium" ,"sugars","potass","weight","cups","rating","fiber","carbo")]
+
+Corr_plot <- cor(Corr_Data)
+
+Corr_plot
+
+```
+
+
+</center>
+
+
+<center>
+
+
+```{r f1, echo=FALSE, warning=FALSE, comment=FALSE}
+
+corrplot(Corr_plot, method = "color", col=brewer.pal(n=8, name="BuGn"),tl.col="black",tl.srt=45,addCoef.col = "black",number.cex = 0.5)
+
+```
+
+</center>
+
+> Fiber and Potass seems to have a strong correlation
+
+### ii. Removing Variables 
+
+<center>
+
+```{r f2, echo=FALSE, warning=FALSE, comment=FALSE}
+
+cor.mtest <- function(mat, ...) {
+    mat <- as.matrix(mat)
+    n <- ncol(mat)
+    p.mat<- matrix(NA, n, n)
+    diag(p.mat) <- 0
+    for (i in 1:(n - 1)) {
+        for (j in (i + 1):n) {
+            tmp <- cor.test(mat[, i], mat[, j], ...)
+            p.mat[i, j] <- p.mat[j, i] <- tmp$p.value
+        }
+    }
+  colnames(p.mat) <- rownames(p.mat) <- colnames(mat)
+  p.mat
+}
+
+p.mat <- cor.mtest(Corr_plot)
+
+corrplot(Corr_plot, method = "color", col=brewer.pal(n=8, name="BuGn"),tl.col="black",tl.srt=45,addCoef.col = "black",number.cex = 0.5,  p.mat = p.mat, sig.level = 0.01, insig = "blank")
+
+```
+
+</center>
+
+> By computing each p-value, we could remove unsignificant variables (if we are interesting in keeping the correlated variables amongst the dataset) with alpha=0.01 
+
+### iii.
 
 
