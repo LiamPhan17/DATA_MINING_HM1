@@ -11,11 +11,7 @@ output:
     highlight: tango
 ---
 
-```{r clean, include=FALSE}
 
-rm(list = ls()) # clean environment
-
-```
 
 # Quick Start
 
@@ -53,6 +49,13 @@ library(RColorBrewer)
 
 
 # Ex 3.4
+
+```{r clean, include=FALSE}
+
+rm(list = ls()) # clean environment
+
+```
+
 ## Loading Datas and Cleaning
 
 > Loading the dataset called "LaptopSales_red.csv" given for the Homework
@@ -760,15 +763,15 @@ quantitative_sd
 
 ```
 
-### i.
+### i. Which vairables have the largest variability?
 
 > Based on the Histogram Grid and the Standard Errors Summary, Sodium, Potass and Calories have the largest variability
 
-### ii.
+### ii. Which variables seem skedew?
 
 > Potassium, Rating, Fiber and Fat seem skewed. Sugar could also be. 
 
-### iii.
+### iii. Are there any values that seem extreme? 
 
 > We can see that Fiber as at least 2 extremes values (2 classes away from the main cluster), calories and weight as well. Cups could also have extremes values. 
 
@@ -815,7 +818,7 @@ ggplot(Cereals_Data) +
 
 ## f.
 
-### i.
+### i. Which pair of variables is most strongly correlated?
 
 <center>
 
@@ -846,7 +849,7 @@ corrplot(Corr_plot, method = "color", col=brewer.pal(n=8, name="BuGn"),tl.col="b
 
 > Fiber and Potass seems to have a strong correlation
 
-### ii. Removing Variables 
+### ii. How can we reduce the number of variables based on these correlations? 
 
 <center>
 
@@ -877,6 +880,53 @@ corrplot(Corr_plot, method = "color", col=brewer.pal(n=8, name="BuGn"),tl.col="b
 
 > By computing each p-value, we could remove unsignificant variables (if we are interesting in keeping the correlated variables amongst the dataset) with alpha=0.01 
 
-### iii.
+### iii. How would the correlations change if we normalized the data first?
+
+<center>
+
+```{r f5, echo=FALSE, warning=FALSE, comment=FALSE}
+
+Scale_data <- as.data.frame(scale(Corr_Data))
+
+Corr_plot_scale <- cor(Scale_data)
+
+Corr_plot_scale
+
+```
+
+</center>
+
+<center>
+
+
+```{r f6, echo=FALSE, warning=FALSE, comment=FALSE}
+
+corrplot(Corr_plot_scale, method = "color", col=brewer.pal(n=8, name="PuBuGn"),tl.col="black",tl.srt=45,addCoef.col = "black",number.cex = 0.5)
+
+```
+
+</center>
+
+
+<center>
+
+```{r f7, echo=FALSE, warning=FALSE, comment=FALSE}
+
+p.mat <- cor.mtest(Corr_plot_scale)
+
+corrplot(Corr_plot_scale, method = "color", col=brewer.pal(n=8, name="PuBuGn"),tl.col="black",tl.srt=45,addCoef.col = "black",number.cex = 0.5,  p.mat = p.mat, sig.level = 0.01, insig = "blank")
+
+```
+
+
+</center>
+
+
+
+
+
+
+
+
 
 
