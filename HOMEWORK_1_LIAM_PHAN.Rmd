@@ -156,7 +156,7 @@ result1 <- print(paste("Last Recorded Prices are", Actual_Price[1,1], "USD", "an
 > Here is given the last recorded prices for 2018
 
 
-### ii.Does price change with time?
+### ii. Does price change with time?
 
 
 ```{r 61, include=FALSE}
@@ -610,7 +610,7 @@ rm(list = ls()) # clean environment
 
 ```
 
-## Loading Datas and Cleaning
+## Loading Datas and Cleaning 
 
 > Loading the dataset called "Cereals.csv" given for the Homework
 
@@ -660,6 +660,8 @@ b_result <- summary(Cereals_Data)
 b_result
 
 ```
+
+</center>
 
 </center>
 
@@ -771,7 +773,7 @@ quantitative_sd
 
 ### iii. Are there any values that seem extreme? 
 
-> We can see that Fiber as at least 2 extremes values (2 classes away from the main cluster), calories and weight as well. Cups could also have extremes values. 
+> We can see that Fiber has at least 2 extremes values (2 classes away from the main cluster), calories and weight as well. Cups could also have extremes values. 
 
 ## d.
 
@@ -779,12 +781,14 @@ quantitative_sd
 
 ```{r d, echo=FALSE, warning=FALSE, comment=FALSE}
 
+ggplotly(
 ggplot(Cereals_Data) +
  aes(x = type, y = calories) +
  geom_boxplot(fill = "#1c6155") +
  labs(x = "Type", 
  y = "Calories", title = "Calories in Hot VS Cold Cereals", subtitle = "Side-by-side Boxplots") +
  theme_classic()
+)
 
 ```
 
