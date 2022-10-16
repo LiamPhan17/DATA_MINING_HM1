@@ -331,7 +331,7 @@ ggplot(Retail_Price_Outlets_Date_Month) +
 
 <center>
 
-```{r 82, echo=FALSE, warning=FALSE, comment=FALSE} 
+```{r 82, echo=FALSE, warning=FALSE, comment=FALSE, results = FALSE} 
 
 #### Plot Of The Retail Price per Configuration
 
@@ -448,13 +448,20 @@ ggplot(Sales_Stores_2) +
 ### iii. How far would customers travel to buy a laptop ?
 
 
-```{r 11}
+<center>
+
+```{r 11134,echo=FALSE,warning=FALSE,message=FALSE,results='hide'}
 
 
-
+{plot(x=Data_Client_Coordinates$customer.X, y=Data_Client_Coordinates$customer.Y, main="Distance Between Customers and Stores",xlab="Longitude",ylab="Latitude",cex=0.5,col="#1c6155", pch=20)+ points(Data_Stores_Coordinates$store.X, Data_Stores_Coordinates$store.Y,cex=1, col="#3d71a8", pch=17) + mtext("Blue = Stores , Green = Customers", side=4)}
 
 
 ```
+
+</center>
+
+> With this plot we can see the distance between Customers and Stores in terms of latitude and longitude. 
+
 
 
 ### iv. How far would customers travel to buy a laptop ? - Alternative
@@ -778,6 +785,10 @@ gg_miss_var(Cereals_Data, show_pct = TRUE)
 
 ```{r b1, echo=FALSE, warning=FALSE, comment=FALSE}
 
+Cereals_Data_2 <- Cereals_Data
+
+Cereals_Data_3 <- Cereals_Data
+
 Cereals_Data <- na.omit(Cereals_Data)
 
 b_result <- summary(Cereals_Data)
@@ -785,7 +796,6 @@ b_result <- summary(Cereals_Data)
 b_result
 
 ```
-
 
 
 </center>
@@ -813,7 +823,7 @@ b_sd
 
 ```{r b2, echo=FALSE, warning=FALSE, comment=FALSE}
 
-Histo_Cereals_Data <- Cereals_Data[,c("calories","protein","fat","sodium" ,"sugars","potass","weight","cups","vitamins","fiber","carbo")]
+Histo_Cereals_Data <- Cereals_Data_2[,c("calories","protein","fat","sodium" ,"sugars","potass","weight","cups","vitamins","fiber","carbo")]
 
 Histo_Graph_1 <- ggplot(Histo_Cereals_Data) +
  aes(x = calories) +
@@ -899,7 +909,7 @@ quantitative_sd
 
 </center>
 
-### i. Which vairables have the largest variability?
+### i. Which variables have the largest variability?
 
 > Based on the Histogram Grid and the Standard Errors Summary, Sodium, Potass and Vitamins have the largest variability.
 
@@ -918,7 +928,7 @@ quantitative_sd
 ```{r d, echo=FALSE, warning=FALSE, comment=FALSE}
 
 ggplotly(
-ggplot(Cereals_Data) +
+ggplot(Cereals_Data_3) +
  aes(x = type, y = calories) +
  geom_boxplot(fill = "#1c6155") +
  labs(x = "Type", 
@@ -930,7 +940,7 @@ ggplot(Cereals_Data) +
 
 </center>
 
-> We are lacking data about Hot Type Cereals to compare it. 
+> We are lacking data about Hot Type Cereals to compare both state of cereals. 
 
 ## e.
 
@@ -939,7 +949,7 @@ ggplot(Cereals_Data) +
 ```{r e, echo=FALSE, warning=FALSE, comment=FALSE}
 
 ggplotly(
-ggplot(Cereals_Data) +
+ggplot(Cereals_Data_3) +
  aes(x = "", y = rating) +
  geom_boxplot(fill = "#1c6155") +
  labs(x = "Shelf Height", 
@@ -1065,7 +1075,7 @@ corrplot(Corr_plot_scale, method = "color", col=brewer.pal(n=8, name="PuBuGn"),t
 
 </center>
 
-> Nothing changes when we normalized the data before correlation matrices and plots
+> Nothing changes when we normalized the data before correlation matrices and plots since normalization already occurs when computing correlations. 
 
 
 
