@@ -580,14 +580,16 @@ ggplotly(
 
 ```{r 1313, echo=FALSE}
 
-ggplotly(
+
 ggplot(Sales_Stores_Revenues) +
- aes(x = Store.Postcode, y = Configuration, fill = Percentage_Revenue) +
- geom_violin(adjust = 1L, scale = "area") +
- scale_fill_distiller(palette = "Greens", direction = 1) +
- labs(x = "Stores", title = "Violinplots of Configuration amonst Stores", subtitle = "In 2018", fill = "% Total Revenues") +
- theme_classic()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-)
+ aes(x = Configuration, y = Store.Postcode, fill = Percentage_Revenue) +
+ geom_boxplot() +
+ scale_fill_gradient(low = "#F7FCFD", high = "#1c6155") +
+ labs(y = "Stores", title = "Boxplots of Configurations amongst Stores", 
+ subtitle = "In 2018", fill = "% Total Revenues") +
+ theme_minimal()+coord_cartesian(xlim = c(180, 600))
+
+
 
 ```
 
