@@ -763,11 +763,11 @@ gg_miss_var(Cereals_Data, show_pct = TRUE)
 
 ## a.
 
-> Ordinal: shelf,vitamins
+> Ordinal: shelf, rating
 
 > Nominal: name, mfr, type    
 
-> Quantitative/Numerical: calories,protein,fat,sodium ,sugars,potass,weight,cups,rating,fiber,carbo      
+> Quantitative/Numerical: calories, protein, fat, sodium , sugars, potass, weight, cups, vitamins, fiber, carbo      
 
 
 ## b.
@@ -813,7 +813,7 @@ b_sd
 
 ```{r b2, echo=FALSE, warning=FALSE, comment=FALSE}
 
-Histo_Cereals_Data <- Cereals_Data[,c("calories","protein","fat","sodium" ,"sugars","potass","weight","cups","rating","fiber","carbo")]
+Histo_Cereals_Data <- Cereals_Data[,c("calories","protein","fat","sodium" ,"sugars","potass","weight","cups","vitamins","fiber","carbo")]
 
 Histo_Graph_1 <- ggplot(Histo_Cereals_Data) +
  aes(x = calories) +
@@ -846,7 +846,7 @@ Histo_Graph_6 <- ggplot(Histo_Cereals_Data) +
  theme_classic()
 
 Histo_Graph_7 <- ggplot(Histo_Cereals_Data) +
- aes(x = rating) +
+ aes(x = vitamins) +
  geom_histogram(bins = 30L, fill = "#1c6155") +
  theme_classic()
 
@@ -901,15 +901,15 @@ quantitative_sd
 
 ### i. Which vairables have the largest variability?
 
-> Based on the Histogram Grid and the Standard Errors Summary, Sodium, Potass and Calories have the largest variability.
+> Based on the Histogram Grid and the Standard Errors Summary, Sodium, Potass and Vitamins have the largest variability.
 
 ### ii. Which variables seem skedew?
 
-> Potassium, Rating, Fiber and Fat seem skewed. Sugar could also be. 
+> Potassium, Fiber and Fat seem skewed. Sugar could also be. 
 
 ### iii. Are there any values that seem extreme? 
 
-> We can see that Fiber has at least 2 extremes values (2 classes away from the main cluster), calories and weight as well. Cups could also have extremes values. 
+> We can see that Fiber has at least 2 extremes values (2 classes away from the main cluster), calories, vitamins and weight as well. Cups could also have extremes values. 
 
 ## d.
 
@@ -964,7 +964,7 @@ ggplot(Cereals_Data) +
 
 ```{r f, echo=FALSE, warning=FALSE, comment=FALSE}
 
-Corr_Data <- Cereals_Data[,c("calories","protein","fat","sodium" ,"sugars","potass","weight","cups","rating","fiber","carbo")]
+Corr_Data <- Cereals_Data[,c("calories","protein","fat","sodium" ,"sugars","potass","weight","cups","vitamins","fiber","carbo")]
 
 Corr_Data <- na.omit(Corr_Data)
 
