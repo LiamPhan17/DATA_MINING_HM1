@@ -595,7 +595,7 @@ ggplot(Sales_Stores_Revenues) +
 
 </center>
 
-> We can see the % Total Revenues from each stores, while seeing the configurations they propose.
+> We can see that S1P 3AU propose higher configurations, while having the smallest % revenues participation out of the total revenues of the company, this could be because it sells higher priced configurations, thus selling less to customer during the year, only to a smaller client pool that wants a better PC for more productive computing work. 
 
 ## d.Configuration Questions 
 
