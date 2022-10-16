@@ -528,13 +528,27 @@ ggplot(All_Distance) +
 
 ```{r 12, include=FALSE}
 
-Sales_Stores_Revenues <- Laptop_Sales_Data[,.(Revenues=sum(Retail.Price, na.rm = TRUE)), by= Store.Postcode]
+#Graph2 
 
-Total_Revenue <- sum(Sales_Stores_Revenues$Revenues)
+Sales_Stores_Revenues <- Laptop_Sales_Data[,.(Revenues=sum(Retail.Price, na.rm = TRUE),Configuration), by= Store.Postcode]
+
+Sales_Stores_Revenues$Revenues <- as.numeric(Sales_Stores_Revenues$Revenues)
+
+Total_Revenue <- 72219555
 
 Sales_Stores_Revenues <- Sales_Stores_Revenues[,Percentage_Revenue:=Revenues/Total_Revenue]
 
 Sales_Stores_Revenues$Percentage_Revenue <- Sales_Stores_Revenues$Percentage_Revenue*100
+
+#Graph1
+
+Sales_Stores_Revenues_2 <- Laptop_Sales_Data[,.(Revenues=sum(Retail.Price, na.rm = TRUE)), by= Store.Postcode]
+
+Sales_Stores_Revenues_2$Revenues <- as.numeric(Sales_Stores_Revenues_2$Revenues)
+
+Sales_Stores_Revenues_2 <- Sales_Stores_Revenues_2[,Percentage_Revenue:=Revenues/Total_Revenue]
+
+Sales_Stores_Revenues_2$Percentage_Revenue <- Sales_Stores_Revenues_2$Percentage_Revenue*100
 
 ```
 
@@ -544,7 +558,7 @@ Sales_Stores_Revenues$Percentage_Revenue <- Sales_Stores_Revenues$Percentage_Rev
 ```{r 121,echo=FALSE}
 
 ggplotly(
-  ggplot(Sales_Stores_Revenues) +
+  ggplot(Sales_Stores_Revenues_2) +
  aes(x = reorder(Store.Postcode,-Percentage_Revenue), y = Percentage_Revenue) +
  geom_col(fill = "#1c6155") +
  labs(x = "Store Postcode", y = "% of Total Revenues", title = "Revenues Contribution per Stores", 
@@ -566,11 +580,20 @@ ggplotly(
 
 ```{r 1313, echo=FALSE}
 
-
+ggplotly(
+ggplot(Sales_Stores_Revenues) +
+ aes(x = Store.Postcode, y = Configuration, fill = Percentage_Revenue) +
+ geom_violin(adjust = 1L, scale = "area") +
+ scale_fill_distiller(palette = "Greens", direction = 1) +
+ labs(x = "Stores", title = "Violinplots of Configuration amonst Stores", subtitle = "In 2018", fill = "% Total Revenues") +
+ theme_classic()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+)
 
 ```
 
 </center>
+
+> We can see the % Total Revenues from each stores, while seeing the configurations they propose.
 
 ## d.Configuration Questions 
 
