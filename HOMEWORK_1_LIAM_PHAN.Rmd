@@ -158,7 +158,7 @@ Actual_Price <- Retail_Price_and_Dates[Date %in% Max_Date_Retail, ]
 
 ```{r 53,echo=FALSE}
 
-result1 <- print(paste("Last Recorded Prices are", Actual_Price[1,1], "USD", "and", Actual_Price[2,1],"USD","on the same Day with a mean of",mean(Actual_Price$Retail.Price),"USD"))
+result1 <- print(paste("Last Recorded Prices are", Actual_Price[1,1], "", "and", Actual_Price[2,1],"","on the same Day with a mean of",mean(Actual_Price$Retail.Price),""))
 
 ```
 
@@ -211,7 +211,7 @@ RetailPricePlot1 <- ggplotly(
  aes(x = Date, y = Mean_Retail_Price) +
  geom_line(size = 1.1, 
  colour = "#1c6155") + geom_point() +
- labs(x = "Months", y = "Average Retail Pric", title = "Average Retail Price of Computer in 2018", 
+ labs(x = "Months", y = "Average Retail Price", title = "Average Retail Price of Computer in 2018", 
  subtitle = "Aggregated by Month") +
  theme_classic()
  )
@@ -224,7 +224,7 @@ RetailPricePlot2 <- ggplotly(
  aes(x = Date, y = Mean_Retail_Price) +
  geom_line(size = 0.4, 
  colour = "#1c6155") + geom_point() +
- labs(x = "Weeks", y = "Average Retail Pric", title = "Average Retail Price of Computer in 2018", 
+ labs(x = "Weeks", y = "Average Retail Price", title = "Average Retail Price of Computer in 2018", 
  subtitle = "Aggregated by Week") +
  theme_classic()
  )
@@ -260,7 +260,7 @@ RetailPricePlot4
 
 </center>
 
-> Those Plot shows different aggregations levels, can be used depending on the analysis we want, thus the granularity need.
+> Those Plot shows different aggregations levels, can be used depending on the analysis we want, thus the granularity need. End of the weekdays is generally having higher retail prices, such as the year starting with month period from May to December. 
 
 ### iii. Are prices consistent across retail outlets?
 
@@ -299,7 +299,7 @@ ggplot(Retail_Price_Outlets_Date) +
 
 </center>
 
-> Each box plots belongs to a specific stores, we can see a common trend across all stores in 2018
+> Each box plots belongs to a specific stores, we can see a common trend across all stores in 2018. We also see that 5 stores tend to have a lower retail price than others with the median closer to 465.
 
 
 ```{r 81, include=FALSE}
@@ -405,7 +405,7 @@ map_1
 
 </center>
 
-> Enjoy looking at each stores and customers in London UK ! You can find there exact location by clicking on them ! 
+> Enjoy looking at each stores and customers in London UK ! You can find there exact location by clicking on them ! We can see a big cluster of 545 clients/stores in the center of City London.
 
 > transform_coordinates: Is a convinient function from Gissr (on Gihtub) that use the cran-project SpTransform as source code but can directly use coordinates in a dataframe and return it in a dataframe. The spTransform methods provide transformation between datum(s) and conversion between projections (also known as projection and/or re-projection), from one unambiguously specified coordinate reference system (CRS) to another, prior to version 1.5 using Proj4 projection arguments.
 
@@ -454,7 +454,7 @@ ggplot(Sales_Stores_2) +
 
 </center>
 
-> The following barplots show two ways of analyzing the stores sales results: by the number of transactions or the sales revenues they each generated during 2018.
+> The following barplots show two ways of analyzing the stores sales results: by the number of transactions or the sales revenues they each generated during 2018. The Store SW1P 3AU sold the most and with the highest revenues. 
 
 
 ### iii. How far would customers travel to buy a laptop ?
@@ -522,7 +522,7 @@ datatable(All_Distance, colnames = c('Customer X ', 'Customer Y', 'Store X', 'St
 ```
 
 
-> Each Unique Customer can be found here, scroll down and see the distance they need to travel to get to their store.
+> Each Unique Customer can be found here, swipe on the right and see the distance they need to travel to get to their store.
 
 <center>
 
@@ -535,8 +535,10 @@ ggplot(All_Distance) +
  geom_histogram(bins = 60L, fill = "#1c6155") +
  labs(x = "Distance (in meters)", 
  title = "Histogram of the Distance between Clients and Stores", subtitle = "In 2018") +
- theme_classic()
-
+ theme_classic() + geom_vline(aes(xintercept = median(All_Distance$Distance)),col='black',size=2) + annotate("text",  x=15000,y=200  ,                    # Add text for mean
+           label = paste("Median =", round(median(All_Distance$Distance))),
+           col = "black",
+           size = 6)
 )
 
 
@@ -544,7 +546,7 @@ ggplot(All_Distance) +
 
 </center>
 
-> Histogram of the Distance between Clients and Stores
+> Histogram of the Distance between Clients and Stores, with median Distance being approximately 4203 meters.  
 
 ## c.Revenue Questions
 
@@ -627,7 +629,6 @@ ggplot(Sales_Stores_Revenues) +
 
 
 ### i. What are the details of each configuration? How does this relate to price?
-
 
 <center>
 
@@ -716,6 +717,8 @@ grid.arrange(detail_plot5)
 
 </center>
 
+> Depending on the details of each configurations, we can see that some specs tend to increase the price higher, such as the screen size, high RAM and high battery life. 
+
 ### ii. Do all stores sell all configurations?
 
 
@@ -748,9 +751,7 @@ ggplot(Stores_Details) +
 
 </center>
 
-
-
-> With this multiple facets barplots, you can spot which configuration is less or not sold depending on the store.
+> With this multiple facets barplots, you can spot which configuration is less or not sold depending on the store. S1P 3AU is not selling every configurations.
 
 
 # <span style="color: #1c6155;">Ex 4.1</span> 
@@ -1024,7 +1025,7 @@ corrplot(Corr_plot, method = "color", col=brewer.pal(n=8, name="BuGn"),tl.col="b
 
 </center>
 
-> We could select the highest correlated variable (because of threat of multicollinearity) and removed them. In the context of a Regression, using VIF on our model would suggest use which explanatories variabes we should remove based on those correlations table. 
+> We could select the highest correlated variable (because of threat of multicollinearity) and removed them. In the context of a Regression, using VIF on our model would suggest us which explanatory variabes we should remove based on those correlations table. 
 
 ### iii. How would the correlations change if we normalized the data first?
 
