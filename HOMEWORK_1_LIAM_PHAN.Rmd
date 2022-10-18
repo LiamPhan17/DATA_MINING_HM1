@@ -7,7 +7,7 @@ output:
     self_contained: true
     thumbnails: true
     lightbox: true
-    gallery: false
+    gallery: true
     highlight: tango
 ---
 
@@ -103,7 +103,7 @@ Retail_Price_and_Dates <- na.omit(Retail_Price_and_Dates)
 
 <center>
 
-```{r 5, echo=FALSE}
+```{r 5, echo=FALSE, warning=FALSE,message=FALSE}
 
 # Histogram of the Retail Price of Computer In 2018
 
@@ -111,12 +111,17 @@ ggplotly(
 ggplot(Retail_Price_and_Dates) +
  aes(x = Retail.Price) +
  geom_histogram(bins = 30L, fill = "#1c6155") +
- labs(x = "Price", y = "Frequency", title = "Histogram of the Retail Price of Computer", subtitle = "In 2018") + theme_classic()
+ labs(x = "Price", y = "Frequency", title = "Histogram of the Retail Price of Computer", subtitle = "In 2018") + theme_classic() + geom_vline(aes(xintercept = median(Retail_Price_and_Dates$Retail.Price)),col='black',size=2) + annotate("text",                        # Add text for mean
+           x =  700,
+           y =  15000,
+           label = paste("Median =", median(Retail_Price_and_Dates$Retail.Price)),
+           col = "black",
+           size = 6)
 )
 
 ```
 
-> This barplot shows the most frequent retail prices for all stores in 2018
+> This barplot shows the most frequent retail prices for all stores in 2018. In Black is the median
 
 </center>
 
@@ -1047,20 +1052,6 @@ Corr_plot_scale
 corrplot(Corr_plot_scale, method = "color", col=brewer.pal(n=8, name="PuBuGn"),tl.col="black",tl.srt=45,addCoef.col = "black",number.cex = 0.5)
 
 ```
-
-</center>
-
-
-<center>
-
-```{r f7, echo=FALSE, warning=FALSE, comment=FALSE}
-
-p.mat <- cor.mtest(Corr_plot_scale)
-
-corrplot(Corr_plot_scale, method = "color", col=brewer.pal(n=8, name="PuBuGn"),tl.col="black",tl.srt=45,addCoef.col = "black",number.cex = 0.5,  p.mat = p.mat, sig.level = 0.01, insig = "blank")
-
-```
-
 
 </center>
 
