@@ -23,9 +23,9 @@ output:
 
 library(data.table) # Efficient Dataframe 
 library(lubridate) # For Dates 
-library(tidyverse) 
+library(tidyverse) # Multiple Package for Useful Data wrangling
 library(esquisse) # Intuitive plotting
-library(plyr) 
+library(plyr) #Data splitting
 library(ggplot2) # Plot Graphs
 library(naniar) #for NA exploration in Dataframe
 library(sp) #spatial data
@@ -35,7 +35,7 @@ library(leaflet) # For Map
 library(leaflet.providers) # For Custom Icons
 library(geosphere) # Spatial Calculations
 library(DT) # Render Table in a explorable UI
-library(gridExtra)
+library(gridExtra) # Multiple Plot at once
 library(corrplot) # Correlation Plot
 library(RColorBrewer) # For Color Palette
 library(rmdformats) # Theme of HTML
@@ -1065,3 +1065,16 @@ corrplot(Corr_plot_scale, method = "color", col=brewer.pal(n=8, name="PuBuGn"),t
 
 
 
+
+# <span style="color: #1c6155;">References</span>
+
+
+[Data Mining for Business Analytics: Concepts, Techniques, and Applications in R](https://www.wiley.com/en-us/Data+Mining+for+Business+Analytics:+Concepts,+Techniques,+and+Applications+in+R-p-9781118879368)
+
+[Gissr Github](https://github.com/skgrange/gissr/)
+
+[Geosphere](https://cran.r-project.org/web/packages/geosphere/)
+
+[DT](https://cran.r-project.org/web/packages/DT/index.html)
+
+[Leaflet](https://leafletjs.com/)
