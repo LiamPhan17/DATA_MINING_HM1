@@ -27,10 +27,8 @@ library(tidyverse)
 library(esquisse) # Intuitive plotting
 library(plyr) 
 library(ggplot2) # Plot Graphs
-#library(cowplot)
 library(naniar) #for NA exploration in Dataframe
 library(sp) #spatial data
-#library(reshape2)
 library(plotly) # Make ggplot2 Dynamic
 library(gissr) # Spatial Transformations
 library(leaflet) # For Map
@@ -38,7 +36,7 @@ library(leaflet.providers) # For Custom Icons
 library(geosphere) # Spatial Calculations
 library(DT) # Render Table in a explorable UI
 library(gridExtra)
-library(corrplot) #C orrelation Plot
+library(corrplot) # Correlation Plot
 library(RColorBrewer) # For Color Palette
 library(rmdformats) # Theme of HTML
 
