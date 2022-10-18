@@ -1017,34 +1017,9 @@ corrplot(Corr_plot, method = "color", col=brewer.pal(n=8, name="BuGn"),tl.col="b
 
 ### ii. How can we reduce the number of variables based on these correlations? 
 
-<center>
-
-```{r f2, echo=FALSE, warning=FALSE, comment=FALSE}
-
-cor.mtest <- function(mat, ...) {
-    mat <- as.matrix(mat)
-    n <- ncol(mat)
-    p.mat<- matrix(NA, n, n)
-    diag(p.mat) <- 0
-    for (i in 1:(n - 1)) {
-        for (j in (i + 1):n) {
-            tmp <- cor.test(mat[, i], mat[, j], ...)
-            p.mat[i, j] <- p.mat[j, i] <- tmp$p.value
-        }
-    }
-  colnames(p.mat) <- rownames(p.mat) <- colnames(mat)
-  p.mat
-}
-
-p.mat <- cor.mtest(Corr_plot)
-
-corrplot(Corr_plot, method = "color", col=brewer.pal(n=8, name="BuGn"),tl.col="black",tl.srt=45,addCoef.col = "black",number.cex = 0.5,  p.mat = p.mat, sig.level = 0.01, insig = "blank")
-
-```
-
 </center>
 
-> By computing each p-value, we could remove unsignificant variables (if we are interesting in keeping the correlated variables amongst the dataset) with alpha=0.01 
+> We could select the highest correlated variable (because of threat of multicollinearity) and removed them. In the context of a Regression, using VIF on our model would suggest use which explanatories variabes we should remove based on those correlations table. 
 
 ### iii. How would the correlations change if we normalized the data first?
 
