@@ -21,30 +21,34 @@ output:
 
 # Loading Packages 
 
-library(data.table)
-library(lubridate)
-library(tidyverse)
-library(esquisse)
-library(plyr)
-library(ggplot2)
-library(cowplot)
-library(naniar) #for NA exploration
+library(data.table) # Efficient Dataframe 
+library(lubridate) # For Dates 
+library(tidyverse) 
+library(esquisse) # Intuitive plotting
+library(plyr) 
+library(ggplot2) # Plot Graphs
+#library(cowplot)
+library(naniar) #for NA exploration in Dataframe
 library(sp) #spatial data
-library(reshape2)
-library(plotly)
-library(gissr)
-library(leaflet)
-library(leaflet.providers)
-library(geosphere)
-library(DT)
+#library(reshape2)
+library(plotly) # Make ggplot2 Dynamic
+library(gissr) # Spatial Transformations
+library(leaflet) # For Map
+library(leaflet.providers) # For Custom Icons
+library(geosphere) # Spatial Calculations
+library(DT) # Render Table in a explorable UI
 library(gridExtra)
-library(corrplot)
-library(RColorBrewer)
-library(rmdformats)
+library(corrplot) #C orrelation Plot
+library(RColorBrewer) # For Color Palette
+library(rmdformats) # Theme of HTML
 
 ```
 
 > Those are required packages
+
+> Geosphere: Spherical trigonometry for geographic applications. That is, compute distances and related measures for angular (longitude/latitude) locations.
+
+> Gissr: gissr is a collection of R functions which make working with spatial data easier.
 
 
 # <span style="color: #1c6155;">Ex 3.4</span> 
@@ -104,6 +108,7 @@ Retail_Price_and_Dates <- na.omit(Retail_Price_and_Dates)
 ```{r 5, echo=FALSE}
 
 # Histogram of the Retail Price of Computer In 2018
+
 ggplotly(
 ggplot(Retail_Price_and_Dates) +
  aes(x = Retail.Price) +
@@ -274,6 +279,7 @@ Retail_Price_Configuration <- na.omit(Retail_Price_Configuration)
 
 <center>
 
+
 ```{r 8,echo=FALSE}
 
 #### Boxplot Across Retail Outlets
@@ -398,6 +404,9 @@ map_1
 
 > Enjoy looking at each stores and customers in London UK ! You can find there exact location by clicking on them ! 
 
+> transform_coordinates: Is a convinient function from Gissr (on Gihtub) that use the cran-project SpTransform as source code but can directly use coordinates in a dataframe and return it in a dataframe. The spTransform methods provide transformation between datum(s) and conversion between projections (also known as projection and/or re-projection), from one unambiguously specified coordinate reference system (CRS) to another, prior to version 1.5 using Proj4 projection arguments.
+
+
 ### ii. Which stores are selling the most?
 
 
@@ -495,6 +504,13 @@ All_Distance <- cbind(Distance_Customer,Distance_Store)
 All_Distance <- All_Distance %>% rowwise() %>% mutate(Distance=distHaversine(c(customer.Y,customer.X),c(store.Y,store.X)))
 
 ```
+
+> DistHarversine: The shortest distance between two points (i.e., the ’great-circle-distance’ or ’as the crow flies’),
+according to the ’haversine method’. This method assumes a spherical earth, ignoring ellipsoidal
+effects. The Haversine (’half-versed-sine’) formula was published by R.W. Sinnott in 1984, although it
+has been known for much longer. At that time computational precision was lower than today (15
+digits precision). With current precision, the spherical law of cosines formula appears to give
+equally good results down to very small distances. 
 
 ```{r 1111,echo=FALSE}
 
