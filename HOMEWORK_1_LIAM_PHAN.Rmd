@@ -19,8 +19,6 @@ output:
 
 ```{r 2, warning=FALSE, message=FALSE }
 
-# Loading Packages 
-
 library(data.table) # Efficient Dataframe 
 library(lubridate) # For Dates 
 library(tidyverse) # Multiple Package for Useful Data wrangling
@@ -1068,6 +1066,7 @@ corrplot(Corr_plot_scale, method = "color", col=brewer.pal(n=8, name="PuBuGn"),t
 
 # <span style="color: #1c6155;">References</span>
 
+[Github Repo for this Homework 1](https://github.com/LiamPhan17/DATA_MINING_HW1)
 
 [Data Mining for Business Analytics: Concepts, Techniques, and Applications in R](https://www.wiley.com/en-us/Data+Mining+for+Business+Analytics:+Concepts,+Techniques,+and+Applications+in+R-p-9781118879368)
 
