@@ -75,6 +75,8 @@ str(Laptop_Sales_Data)
 
 ```{r 333, echo=FALSE, warning=FALSE, comment=FALSE}
 
+# Miss Variables Plot for the Dataset
+
 gg_miss_var(Laptop_Sales_Data, show_pct = TRUE)
 
 ```
@@ -155,6 +157,8 @@ Actual_Price <- Retail_Price_and_Dates[Date %in% Max_Date_Retail, ]
 ```
 
 ```{r 53,echo=FALSE}
+
+# Print Last Recorded Prices (according to last day)
 
 result1 <- print(paste("Last Recorded Prices are", Actual_Price[1,1], "", "and", Actual_Price[2,1],"","on the same Day with a mean of",mean(Actual_Price$Retail.Price),""))
 
@@ -265,7 +269,7 @@ RetailPricePlot4
 
 ```{r 7, include=FALSE}
 
-#### Set Up a Data Subset and NA OMIT
+# Set Up a Data Subset and NA OMIT
 
 Retail_Price_Outlets_Date <- Laptop_Sales_Data[,.(Retail.Price,Store.Postcode,Date)][,Date:=mdy_hm(Date)]
 
@@ -283,7 +287,7 @@ Retail_Price_Configuration <- na.omit(Retail_Price_Configuration)
 
 ```{r 8,echo=FALSE}
 
-#### Boxplot Across Retail Outlets
+# Boxplot Across Retail Outlets
 
 ggplotly(
 ggplot(Retail_Price_Outlets_Date) +
@@ -302,7 +306,7 @@ ggplot(Retail_Price_Outlets_Date) +
 
 ```{r 81, include=FALSE}
 
-#### Retail Price Across Stores During 2018 - Data
+# Retail Price Across Stores During 2018 - Data
 
 Retail_Price_Outlets_Date_Month <- Retail_Price_Outlets_Date[,Floor.Date:=floor_date(Date,unit="month")][,c(Mean_Price=mean(Retail.Price)), by=list(Store.Postcode,Floor.Date)]
 
@@ -315,7 +319,8 @@ colnames(Retail_Price_Outlets_Date_Month)[3] <- "Mean_Retail_Price"
 
 ```{r 83, echo=FALSE}
 
-#### Plot of the Monthly Retail Price per Stores
+# Plot of the Monthly Retail Price per Stores
+
 ggplotly(
 ggplot(Retail_Price_Outlets_Date_Month) +
  aes(x = Floor.Date, y = Mean_Retail_Price, colour = Store.Postcode) +
@@ -340,7 +345,7 @@ ggplot(Retail_Price_Outlets_Date_Month) +
 
 ```{r 82, echo=FALSE, warning=FALSE, comment=FALSE, results = FALSE} 
 
-#### Plot Of The Retail Price per Configuration
+# Plot Of The Retail Price per Configuration
 
 ggplot(Retail_Price_Configuration) +
  aes(x = Configuration, y = Retail.Price) +
@@ -363,7 +368,7 @@ ggplot(Retail_Price_Configuration) +
 
 ```{r 9, echo=FALSE} 
 
-#Transform UK to Worldwide Geodata
+# Transform UK to Worldwide Geodata
 
 ## For Client Data
 
@@ -393,9 +398,11 @@ Data_Stores_Coordinates$store.Y <- as.numeric(Data_Stores_Coordinates$store.Y)
 
 ```{r 84,echo=FALSE} 
 
-#Ploting Map 
+# Plotting Map with leafleet
 
 map_1 <- leaflet() %>% addProviderTiles(providers$CartoDB.Positron) %>% addMarkers(data=Data_Client_Coordinates, lng = ~Data_Client_Coordinates$customer.X, lat = ~Data_Client_Coordinates$customer.Y,icon = list(iconUrl='https://cdn-icons-png.flaticon.com/512/4573/4573516.png',iconSize=c(25,25)), clusterOptions = markerClusterOptions(),popup = ~paste("<h3>Client Coordinates</h3>","<b>Latitude:</b>",customer.X,"<b>Longitude:</b>",customer.Y)) %>% addMarkers(data=Data_Stores_Coordinates, lng = ~Data_Stores_Coordinates$store.X, lat = ~Data_Stores_Coordinates$store.Y,icon = list(iconUrl='https://cdn-icons-png.flaticon.com/512/726/726569.png',iconSize=c(25,25)), clusterOptions = markerClusterOptions(), popup = ~paste("<h3>Store Coordinates</h3>","<b>Latitude:</b>",store.X,"<b>Longitude:</b>",store.Y))
+
+# Calling Leafleet stored map
 
 map_1
 
@@ -412,6 +419,8 @@ map_1
 
 
 ```{r 10, include=FALSE}
+
+# Data Preparation
 
 Laptop_Sales_Data_2 <- Laptop_Sales_Data
 
@@ -462,8 +471,32 @@ ggplot(Sales_Stores_2) +
 
 ```{r 11134,echo=FALSE,warning=FALSE,message=FALSE,results='hide'}
 
+#Transform UK to Worldwide Geodata
 
-{plot(x=Data_Client_Coordinates$customer.X, y=Data_Client_Coordinates$customer.Y, main="Distance Between Customers and Stores",xlab="Longitude",ylab="Latitude",cex=0.5,col="#1c6155", pch=20)+ points(Data_Stores_Coordinates$store.X, Data_Stores_Coordinates$store.Y,cex=1, col="#3d71a8", pch=17) + mtext("Blue = Stores , Green = Customers", side=4)}
+## For Client Data
+
+Data_Client_Coordinates_Group <- Laptop_Sales_Data[,.(customer.X,customer.Y,Store.Postcode)]
+Data_Client_Coordinates_Group <- na.omit(Data_Client_Coordinates_Group)
+Data_Client_Coordinates_Group <- distinct(Data_Client_Coordinates_Group)
+Data_Client_Coordinates_Group <- transform_coordinates(Data_Client_Coordinates_Group,
+                                                        latitude="customer.Y",longitude = "customer.X", from = projection_bng(), to = projection_wgs84())
+Data_Client_Coordinates_Group$customer.X <- as.numeric(Data_Client_Coordinates_Group$customer.X)
+Data_Client_Coordinates_Group$customer.Y <- as.numeric(Data_Client_Coordinates_Group$customer.Y)
+
+## For Store Data
+
+Data_Stores_Coordinates_Group <- Laptop_Sales_Data[,.(store.X,store.Y,Store.Postcode)]
+Data_Stores_Coordinates_Group <- na.omit(Data_Stores_Coordinates_Group)
+Data_Stores_Coordinates_Group <- distinct(Data_Stores_Coordinates_Group)
+Data_Stores_Coordinates_Group <- transform_coordinates(Data_Stores_Coordinates_Group,
+                                                        latitude="store.Y",longitude = "store.X", from = projection_bng(), to = projection_wgs84())
+
+Data_Stores_Coordinates_Group$store.X <- as.numeric(Data_Stores_Coordinates_Group$store.X)
+Data_Stores_Coordinates_Group$store.Y <- as.numeric(Data_Stores_Coordinates_Group$store.Y)
+
+##  Map of Clients and Stores with Historical Transactions Clusters, for Distances
+
+ggplot()+geom_point(data=Data_Client_Coordinates_Group, aes(customer.X,customer.Y,color=Store.Postcode,fill=Store.Postcode),size=0.8,shape=21) + geom_point(data=Data_Stores_Coordinates_Group, aes(store.X,store.Y,color=Store.Postcode,fill=Store.Postcode),size=3,shape=24)+ggtitle("Clients and Stores Distances, with Past Transactions Clusters")+xlab("Latitude")+ylab("Longitutde")+theme_classic()
 
 
 ```
@@ -479,7 +512,7 @@ ggplot(Sales_Stores_2) +
 
 ```{r 111, include=FALSE}
 
-# Distance Calculations
+# Preparing the Dataset
 
 Distance_Customer_Shop_Data <- Laptop_Sales_Data[, .(customer.X,customer.Y,store.X,store.Y)]
 
@@ -492,6 +525,8 @@ Distance_Customer_Shop_Data$customer.Y <- as.numeric(Distance_Customer_Shop_Data
 Distance_Customer_Shop_Data$store.X <- as.numeric(Distance_Customer_Shop_Data$store.X)
 Distance_Customer_Shop_Data$store.Y <- as.numeric(Distance_Customer_Shop_Data$store.Y)
 
+## Transforming Coordinates in Worlwide standards
+
 Distance_Customer <- transform_coordinates(Distance_Customer_Shop_Data, latitude="customer.Y",longitude = "customer.X", from = projection_bng(), to = projection_wgs84())
 
 Distance_Customer <- Distance_Customer[,c(1,2)]
@@ -500,7 +535,11 @@ Distance_Store <- transform_coordinates(Distance_Customer_Shop_Data, latitude="s
 
 Distance_Store <- Distance_Store[,c(3,4)]
 
+# Append Distance Column
+
 All_Distance <- cbind(Distance_Customer,Distance_Store)
+
+# Mutate and Compute Distances Column with Haversine
 
 All_Distance <- All_Distance %>% rowwise() %>% mutate(Distance=distHaversine(c(customer.Y,customer.X),c(store.Y,store.X)))
 
@@ -515,6 +554,8 @@ equally good results down to very small distances.
 
 ```{r 1111,echo=FALSE}
 
+# Show Render Table for Data Exploration
+
 datatable(All_Distance, colnames = c('Customer X ', 'Customer Y', 'Store X', 'Store Y', 'Distance Between Them in Meters'))
 
 ```
@@ -525,6 +566,8 @@ datatable(All_Distance, colnames = c('Customer X ', 'Customer Y', 'Store X', 'St
 <center>
 
 ```{r 1121,echo=FALSE}
+
+# Histogram of Distances between Clients and Stores
 
 ggplotly(
   
@@ -554,7 +597,7 @@ ggplot(All_Distance) +
 
 ```{r 12, include=FALSE}
 
-#Graph2 
+# Preparing Data for the Revenu Plot
 
 Sales_Stores_Revenues <- Laptop_Sales_Data[,.(Revenues=sum(Retail.Price, na.rm = TRUE),Configuration), by= Store.Postcode]
 
@@ -566,7 +609,7 @@ Sales_Stores_Revenues <- Sales_Stores_Revenues[,Percentage_Revenue:=Revenues/Tot
 
 Sales_Stores_Revenues$Percentage_Revenue <- Sales_Stores_Revenues$Percentage_Revenue*100
 
-#Graph1
+# Preparing Data for the Revenues Plot
 
 Sales_Stores_Revenues_2 <- Laptop_Sales_Data[,.(Revenues=sum(Retail.Price, na.rm = TRUE)), by= Store.Postcode]
 
@@ -582,6 +625,8 @@ Sales_Stores_Revenues_2$Percentage_Revenue <- Sales_Stores_Revenues_2$Percentage
 <center>
 
 ```{r 121,echo=FALSE}
+
+# Proportional Revenues participation of each stores 
 
 ggplotly(
   ggplot(Sales_Stores_Revenues_2) +
@@ -606,6 +651,7 @@ ggplotly(
 
 ```{r 1313, echo=FALSE}
 
+# Relationship with configuration plot and stores
 
 ggplot(Sales_Stores_Revenues) +
  aes(x = Configuration, y = Store.Postcode, fill = Percentage_Revenue) +
@@ -631,6 +677,8 @@ ggplot(Sales_Stores_Revenues) +
 <center>
 
 ```{r 14,echo=FALSE}
+
+# Preparing Dataset
 
 Detail_Price <- Laptop_Sales_Data[,.(Retail.Price,Screen.Size..Inches.,Battery.Life..Hours.,RAM..GB.,Processor.Speeds..GHz.,HD.Size..GB.,Integrated.Wireless.,Bundled.Applications.)]
 
@@ -722,6 +770,8 @@ grid.arrange(detail_plot5)
 
 ```{r 15, include=FALSE}
 
+# Preparing Dataset
+
 Stores_Details <- Laptop_Sales_Data[,.(Store.Postcode,Configuration)]
 
 Stores_Details <- na.omit(Stores_Details)
@@ -734,6 +784,8 @@ Stores_Details$Configuration <- as.integer(Stores_Details$Configuration)
 <center>
 
 ```{r 151,echo=FALSE}
+
+# Plotting each confiurations per stores
 
 ggplotly(
 ggplot(Stores_Details) +
@@ -780,6 +832,8 @@ str(Cereals_Data)
 
 ```{r a3, echo=FALSE, warning=FALSE, comment=FALSE}
 
+# Plotting missing Variables
+
 gg_miss_var(Cereals_Data, show_pct = TRUE)
 
 ```
@@ -803,6 +857,8 @@ gg_miss_var(Cereals_Data, show_pct = TRUE)
 
 ```{r b1, echo=FALSE, warning=FALSE, comment=FALSE}
 
+# Creating alternate dataset
+
 Cereals_Data_2 <- Cereals_Data
 
 Cereals_Data_3 <- Cereals_Data
@@ -824,6 +880,8 @@ b_result
 
 ```{r b11, echo=FALSE, warning=FALSE, comment=FALSE}
 
+# Standard errors computations
+
 b_sd <- sapply(Cereals_Data,sd,na.rm=TRUE)
 
 b_sd
@@ -840,6 +898,8 @@ b_sd
 > Histogram of Quantitative Variables
 
 ```{r b2, echo=FALSE, warning=FALSE, comment=FALSE}
+
+# All Histogram creations
 
 Histo_Cereals_Data <- Cereals_Data_2[,c("calories","protein","fat","sodium" ,"sugars","potass","weight","cups","vitamins","fiber","carbo")]
 
@@ -907,6 +967,8 @@ Histo_Graph_11 <- ggplot(Histo_Cereals_Data) +
 
 ```{r b3, echo=FALSE, warning=FALSE, comment=FALSE}
 
+# Arranging Histograms in one plot
+
 grid.arrange(Histo_Graph_1,Histo_Graph_2,Histo_Graph_3,Histo_Graph_4,Histo_Graph_5,Histo_Graph_6,Histo_Graph_7,Histo_Graph_8,Histo_Graph_9,Histo_Graph_10,Histo_Graph_11)
 
 ```
@@ -918,6 +980,8 @@ grid.arrange(Histo_Graph_1,Histo_Graph_2,Histo_Graph_3,Histo_Graph_4,Histo_Graph
 > Standards Errors
 
 ```{r b4, echo=FALSE, warning=FALSE, comment=FALSE}
+
+# Standard errors computing
 
 quantitative_sd <- sapply(Histo_Cereals_Data,sd,na.rm=TRUE)
 
@@ -945,6 +1009,8 @@ quantitative_sd
 
 ```{r d, echo=FALSE, warning=FALSE, comment=FALSE}
 
+# Plotting Calories in Hot vs Cold Cereals
+
 ggplotly(
 ggplot(Cereals_Data_3) +
  aes(x = type, y = calories) +
@@ -965,6 +1031,8 @@ ggplot(Cereals_Data_3) +
 <center>
 
 ```{r e, echo=FALSE, warning=FALSE, comment=FALSE}
+
+# Plotting Rating by Shelft Height
 
 ggplotly(
 ggplot(Cereals_Data_3) +
@@ -992,6 +1060,8 @@ ggplot(Cereals_Data_3) +
 
 ```{r f, echo=FALSE, warning=FALSE, comment=FALSE}
 
+# Correlations matrices
+
 Corr_Data <- Cereals_Data[,c("calories","protein","fat","sodium" ,"sugars","potass","weight","cups","vitamins","fiber","carbo")]
 
 Corr_Data <- na.omit(Corr_Data)
@@ -1010,6 +1080,8 @@ Corr_plot
 
 
 ```{r f1, echo=FALSE, warning=FALSE, comment=FALSE}
+
+# Correlations plotting
 
 corrplot(Corr_plot, method = "color", col=brewer.pal(n=8, name="BuGn"),tl.col="black",tl.srt=45,addCoef.col = "black",number.cex = 0.5)
 
@@ -1033,6 +1105,8 @@ corrplot(Corr_plot, method = "color", col=brewer.pal(n=8, name="BuGn"),tl.col="b
 
 ```{r f5, echo=FALSE, warning=FALSE, comment=FALSE}
 
+# Normalization of Data with Scale
+
 Scale_data <- as.data.frame(scale(Corr_Data))
 
 Corr_plot_scale <- cor(Scale_data)
@@ -1047,6 +1121,8 @@ Corr_plot_scale
 
 
 ```{r f6, echo=FALSE, warning=FALSE, comment=FALSE}
+
+# Correlation plot after Normalization
 
 corrplot(Corr_plot_scale, method = "color", col=brewer.pal(n=8, name="PuBuGn"),tl.col="black",tl.srt=45,addCoef.col = "black",number.cex = 0.5)
 
