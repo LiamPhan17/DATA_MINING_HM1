@@ -582,7 +582,7 @@ ggplotly(
 ggplot(All_Distance) +
  aes(x = Distance) +
  geom_histogram(bins = 60L, fill = "#1c6155") +
- labs(x = "Distance (in meters)", 
+ labs(x = "Distance (in meters)",y = "Frequency", 
  title = "Histogram of the Distance between Clients and Stores", subtitle = "In 2018") +
  theme_classic() + geom_vline(aes(xintercept = median(All_Distance$Distance)),col='black',size=2) + annotate("text",  x=15000,y=200  ,                    # Add text for mean
            label = paste("Median =", round(median(All_Distance$Distance))),
@@ -852,11 +852,11 @@ gg_miss_var(Cereals_Data, show_pct = TRUE)
 
 ## a.
 
-> Ordinal: shelf, rating
+> **Ordinal**: shelf, rating
 
-> Nominal: name, mfr, type    
+> **Nominal**: name, mfr, type    
 
-> Quantitative/Numerical: calories, protein, fat, sodium , sugars, potass, weight, cups, vitamins, fiber, carbo      
+> **Quantitative/Numerical**: calories, protein, fat, sodium , sugars, potass, weight, cups, vitamins, fiber, carbo      
 
 
 ## b.
