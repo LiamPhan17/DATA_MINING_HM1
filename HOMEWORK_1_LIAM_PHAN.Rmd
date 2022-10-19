@@ -220,7 +220,7 @@ RetailPricePlot1 <- ggplotly(
  aes(x = Date, y = Mean_Retail_Price) +
  geom_line(size = 1.1, 
  colour = "#1c6155") + geom_point() +
- labs(x = "Months", y = "Average Retail Price", title = "Average Retail Price of Computer in 2018", 
+ labs(x = "Months", y = "Average Retail Price", title = "Average Retail Price of Computer in 2018 - Aggregated by Month", 
  subtitle = "Aggregated by Month") +
  theme_classic()
  )
@@ -233,7 +233,7 @@ RetailPricePlot2 <- ggplotly(
  aes(x = Date, y = Mean_Retail_Price) +
  geom_line(size = 0.4, 
  colour = "#1c6155") + geom_point() +
- labs(x = "Weeks", y = "Average Retail Price", title = "Average Retail Price of Computer in 2018", 
+ labs(x = "Weeks", y = "Average Retail Price", title = "Average Retail Price of Computer in 2018 - Aggregated by Weeks", 
  subtitle = "Aggregated by Week") +
  theme_classic()
  )
@@ -246,7 +246,7 @@ RetailPricePlot3 <- ggplotly(
  aes(x = Date, y = Mean_Retail_Price) +
  geom_line(size = 0.2, 
  colour = "#1c6155")  +
- labs(x = "Days", y = "Average Retail Price", title = "Average Retail Price of Computer in 2018", 
+ labs(x = "Days", y = "Average Retail Price", title = "Average Retail Price of Computer in 2018 - Aggregated by Days", 
  subtitle = "Aggregated by Day") + 
  theme_classic()
  )
