@@ -23,10 +23,10 @@ library(data.table) # Efficient Dataframe
 library(lubridate) # For Dates 
 library(tidyverse) # Multiple Package for Useful Data wrangling
 library(esquisse) # Intuitive plotting
-library(plyr) #Data splitting
+library(plyr) # Data splitting
 library(ggplot2) # Plot Graphs
-library(naniar) #for NA exploration in Dataframe
-library(sp) #spatial data
+library(naniar) # for NA exploration in Dataframe
+library(sp) # spatial data
 library(plotly) # Make ggplot2 Dynamic
 library(gissr) # Spatial Transformations
 library(leaflet) # For Map
@@ -37,6 +37,7 @@ library(gridExtra) # Multiple Plot at once
 library(corrplot) # Correlation Plot
 library(RColorBrewer) # For Color Palette
 library(rmdformats) # Theme of HTML
+library(manipulateWidget) # Handling multiple plotly graphs
 
 ```
 
@@ -82,9 +83,11 @@ gg_miss_var(Laptop_Sales_Data, show_pct = TRUE)
 ```
 
 
-> Retail Price is the only variable missing at rate of approximately 4% 
-
 </center>
+
+> Retail Price is the only variable missing at rate of approximately 4.5% 
+
+
 
 ## a.Price Questions:
 
@@ -121,9 +124,12 @@ ggplot(Retail_Price_and_Dates) +
 
 ```
 
-> This barplot shows the most frequent retail prices for all stores in 2018. In Black is the median
-
 </center>
+
+
+> This Histogram shows the most frequent retail prices for all stores in 2018. In Black is the median
+
+
 
 <center>
 
@@ -142,9 +148,10 @@ ggplot(Retail_Price_and_Dates) +
 
 ```
 
-</center>
 
 > We can interpret this boxplot as the mean or median retail price of the 2018 Computer Dataset, click on the white sphere to get the mean !
+
+</center>
 
 ```{r 52, include=FALSE}
 
@@ -461,7 +468,7 @@ ggplot(Sales_Stores_2) +
 
 </center>
 
-> The following barplots show two ways of analyzing the stores sales results: by the number of transactions or the sales revenues they each generated during 2018. The Store SW1P 3AU sold the most and with the highest revenues. 
+> The following histograms show two ways of analyzing the stores sales results: by the number of transactions or the sales revenues they each generated during 2018. The Store SW1P 3AU sold the most and with the highest revenues. 
 
 
 ### iii. How far would customers travel to buy a laptop ?
@@ -469,7 +476,7 @@ ggplot(Sales_Stores_2) +
 
 <center>
 
-```{r 11134,echo=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r 11134,echo=FALSE,warning=FALSE,message=FALSE,fig.width=12}
 
 #Transform UK to Worldwide Geodata
 
@@ -503,7 +510,8 @@ ggplot()+geom_point(data=Data_Client_Coordinates_Group, aes(customer.X,customer.
 
 </center>
 
-> With this plot we can see the distance between Customers and Stores in terms of latitude and longitude. 
+
+> With this plot we can see the distance between Customers and Stores in terms of latitude and longitude.
 
 
 
@@ -565,7 +573,7 @@ datatable(All_Distance, colnames = c('Customer X ', 'Customer Y', 'Store X', 'St
 
 <center>
 
-```{r 1121,echo=FALSE}
+```{r 1121,echo=FALSE,message=FALSE,warning=FALSE}
 
 # Histogram of Distances between Clients and Stores
 
@@ -641,7 +649,7 @@ ggplotly(
 
 </center>
 
-> You can see the proportional revenues participation of each stores in 2018. 
+> You can see the proportional revenues participation of each stores in 2018. SW1P 3AU still is the store contributing the most to Acell's Revenues.
 
 
 ### ii. How does this relationship depend on the configuration?
@@ -783,9 +791,9 @@ Stores_Details$Configuration <- as.integer(Stores_Details$Configuration)
 
 <center>
 
-```{r 151,echo=FALSE}
+```{r 151,echo=FALSE, fig.width=6,fig.height=6}
 
-# Plotting each confiurations per stores
+# Plotting each configurations per stores
 
 ggplotly(
 ggplot(Stores_Details) +
@@ -839,6 +847,8 @@ gg_miss_var(Cereals_Data, show_pct = TRUE)
 ```
 
 </center>
+
+> We can see that Carbo and Sugars are missing at level 1.3% (approx.) and Potass at level 2.6% (approx.)
 
 ## a.
 
@@ -997,11 +1007,79 @@ quantitative_sd
 
 ### ii. Which variables seem skedew?
 
-> Potassium, Fiber and Fat seem skewed. Sugar could also be. 
+> Potassium, Fiber and Fat seem skewed. Cups could also be. 
 
 ### iii. Are there any values that seem extreme? 
 
-> We can see that Fiber has at least 2 extremes values (2 classes away from the main cluster), calories, vitamins and weight as well. Cups could also have extremes values. 
+> We can see that Fiber has at least 3 extremes values (2 classes away from the main cluster) have extremes values. We could check with some boxplots to better see what are those outliers. 
+
+<center> 
+
+> Multiple Boxplots for outliers detections
+
+```{r c1586, echo=FALSE, warning=FALSE, comment=FALSE}
+
+# Boxplot for Extremes values
+
+
+box1 <- ggplotly(ggplot(Cereals_Data_2) +
+ aes(x = "", y = fiber) +
+ geom_boxplot(fill = "#1c6155") +
+ labs(title = "Fiber") +
+ theme_classic())
+
+box2 <- ggplotly(ggplot(Cereals_Data_2) +
+ aes(x = "", y = calories) +
+ geom_boxplot(fill = "#1c6155") +
+ labs(title = "Calories") +
+ theme_classic())
+
+box3 <- ggplotly(ggplot(Cereals_Data_2) +
+ aes(x = "", y = vitamins) +
+ geom_boxplot(fill = "#1c6155") +
+ labs(title = "Vitamins") +
+ theme_classic())
+
+box4 <- ggplotly(ggplot(Cereals_Data_2) +
+ aes(x = "", y = weight) +
+ geom_boxplot(fill = "#1c6155") +
+ labs(title = "Weight") +
+ theme_classic())
+
+box5 <- ggplotly(ggplot(Cereals_Data_2) +
+ aes(x = "", y = cups) +
+ geom_boxplot(fill = "#1c6155") +
+ labs(title = "Cups") +
+ theme_classic())
+
+box6 <- ggplotly(ggplot(Cereals_Data_2) +
+ aes(x = "", y = potass) +
+ geom_boxplot(fill = "#1c6155") +
+ labs(title = "Potass") +
+ theme_classic())
+
+box7 <- ggplotly(ggplot(Cereals_Data_2) +
+ aes(x = "", y = protein) +
+ geom_boxplot(fill = "#1c6155") +
+ labs(title = "Protein") +
+ theme_classic())
+
+box8 <- ggplotly(ggplot(Cereals_Data_2) +
+ aes(x = "", y = sodium) +
+ geom_boxplot(fill = "#1c6155") +
+ labs(title = "Sodium") +
+ theme_classic())
+
+
+# Combine all Plotly Boxplots together for keeping interactivity 
+
+combineWidgets(box1,box2,box3,box4,box5,box6,box7,box8,nrow = 2)
+
+```
+
+
+</center> 
+
 
 ## d.
 
