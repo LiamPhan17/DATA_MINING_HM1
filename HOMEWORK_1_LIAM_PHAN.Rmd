@@ -259,7 +259,7 @@ RetailPricePlot4 <- ggplotly(
   ggplot(Retail_Price_and_Dates_WeekDay) +
  aes(x = Translation, y = Mean_Retail_Price) +
  geom_col(fill = "#1c6155") +
- labs(x = "Weekdays", y = "Average Retail Price", title = "Average Retail Price during Weekdays", subtitle = "In 2018") + 
+ labs(x = "Weekdays", y = "Average Retail Price", title = "Average Retail Price In 2018 by Weekdays", subtitle = "In 2018") + 
  theme_classic() + coord_cartesian(ylim = c(505, 510))
 )
 
@@ -1126,7 +1126,9 @@ ggplot(Cereals_Data_3) +
 
 </center>
 
-> Shelf 1 and 3 are pretty close (both median close to 40-42), we could only take a mean of category 1 et 3 and then predict with category 2. 
+> Shelf 1 and 3 are pretty close (both median close to 40-42), we could use a statistical test for comparing the three boxplots and see if there is a real median/mean differences. Without doing any statistical test, we can also see that the boxplots are overlapping for category 1 and 3, meaning we could interpret them as identical groups on average. 
+
+
 
 ## f.
 
