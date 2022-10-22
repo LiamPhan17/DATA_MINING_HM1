@@ -1126,7 +1126,7 @@ ggplot(Cereals_Data_3) +
 
 </center>
 
-> Shelf 1 and 3 are pretty close (both median close to 40-42), we could use a statistical test for comparing the three boxplots and see if there is a real median/mean differences. Without doing any statistical test, we can also see that the boxplots are overlapping for category 1 and 3, meaning we could interpret them as identical groups on average. 
+> Shelf 1 and 3 are pretty close (both median close to 40-42), we could use a statistical test for comparing the three boxplots and see if there is a real median/mean differences. Without doing any statistical test, we can also see that the boxplot medians are overlapping for category 1 and 3, meaning we could interpret them as identical groups on average. 
 
 
 
