@@ -1,2 +1,5 @@
 # DATA_MINING_HW1
- Creating Value Through Data Mining - Liam Phan
+Master In Business Analytics - University of Geneva (GSEM)
+
+Creating Value Through Data Mining
+
